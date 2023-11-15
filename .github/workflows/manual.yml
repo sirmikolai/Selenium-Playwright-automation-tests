@@ -1,8 +1,9 @@
 name: Manual test runner
+
 on:
   workflow_dispatch:
     inputs:
-        browser:
+      browser:
         type: choice
         description: Choose browser
         default: Chrome
@@ -10,9 +11,12 @@ on:
         - Chrome
         - Firefox
         - Edge
+
 jobs:
   Execute-tests:
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -24,23 +28,23 @@ jobs:
       - name: Install Chrome Browser
         if: "contains(github.event.inputs.browser, 'Chrome')"
         run:   |
-            chmod +x ./SeleniumProject/scripts/InstallChrome.sh
+            chmod +x ./scripts/InstallChrome.sh
                         ./scripts/InstallChrome.sh
       - name: Install Firefox Browser
         if: "contains(github.event.inputs.browser, 'Firefox')"
         run:   |
-            chmod +x ./SeleniumProject/scripts/InstallFirefox.sh
+            chmod +x ./scripts/InstallFirefox.sh
                         ./scripts/InstallFirefox.sh
       - name: Install Edge Browser
         if: "contains(github.event.inputs.browser, 'Edge')"
         run:   |
-            chmod +x ./SeleniumProject/scripts/InstallEdge.sh
+            chmod +x ./scripts/InstallEdge.sh
                         ./scripts/InstallEdge.sh
       - name: Build and install with Maven
         run: mvn clean install --file ./SeleniumProject/pom.xml -DskipTests
       - name: Initialize App server
         run: mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=initializeappserversuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
       - name: Run all E2E tests
-        run: mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
+        run: mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yey
       - name: Remove test data
         run: mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=removetestdatasuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
