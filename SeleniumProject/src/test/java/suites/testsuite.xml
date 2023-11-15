@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="test suite">
-    <test name="e2e tests" parallel="classes" thread-count="1">
+    <test name="e2e tests">
         <classes>
             <class name="testngtests.RegistrationTest"/>
             <class name="testngtests.LoginTest"/>
