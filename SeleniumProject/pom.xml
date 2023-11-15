@@ -16,6 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <browser>chrome</browser>
+        <headless>no</headless>
         <suiteFile>testsuite.xml</suiteFile>
     </properties>
 
@@ -78,6 +79,7 @@
                 <configuration>
                     <systemPropertyVariables>
                         <browser>${browser}</browser>
+                        <headless>${headless}</headless>
                         <suiteFile>${suiteFile}</suiteFile>
                     </systemPropertyVariables>
                     <suiteXmlFiles>

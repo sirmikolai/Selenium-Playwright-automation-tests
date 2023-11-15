@@ -14,6 +14,8 @@ import models.testngpages.carbrand.CarBrandsBrowsePage;
 import models.testngpages.signin.SignInFormPage;
 import models.testngpages.signup.SignUpFormPage;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
@@ -31,6 +33,8 @@ import static utils.LogBinder.unbind;
 
 
 public abstract class AbstractTest implements PomParams {
+
+    private static final Log logger = LogFactory.getLog(AbstractTest.class);
 
     private WebDriver driver;
     private static ThreadLocal<WebDriver> threadLocalDriver = new ThreadLocal<>();
@@ -74,6 +78,7 @@ public abstract class AbstractTest implements PomParams {
     }
 
     protected  <T extends AbstractPage> T openPageWithUrl(String url, Class<T> clazz) {
+        logger.info(String.format("Opening page with url: %s", url));
         driver.manage().deleteAllCookies();
         driver.get(url);
         driver.manage().window().maximize();

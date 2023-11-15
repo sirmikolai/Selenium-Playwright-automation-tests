@@ -5,7 +5,6 @@ import models.testngpages.carbrand.CarBrandFormPage;
 import models.testngpages.carbrand.carmodel.CarBrandModelsBrowsePage;
 import models.testngpages.carbrand.carmodel.CarModelFormPage;
 import org.assertj.core.api.Assertions;
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import testngtests.abstractclasses.AbstractTest;
@@ -64,7 +63,6 @@ public class CarModelTest extends AbstractTest {
         carBrandModelsBrowsePage.deleteCarModelForName(newCarModel.getName());
         assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_DELETED_CAR_MODEL_TEXT.getAlertText());
         assertThatCarModelIsExistOrNot(newCarModel, false);
-        Assert.assertFalse(carBrandModelsBrowsePage.isRowWithCarModelNameVisible(newCarModel.getName()));
     }
 
     private void assertThatCarModelExistAndHasExpectedData(CarModel carModel) {

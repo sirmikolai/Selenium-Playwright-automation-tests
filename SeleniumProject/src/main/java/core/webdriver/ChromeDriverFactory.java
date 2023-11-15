@@ -11,8 +11,12 @@ public class ChromeDriverFactory implements DriverFactory, PomParams {
     public WebDriver createWebDriver() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
+        options.addArguments("window-size=1920,1080");
         options.addArguments("start-maximized");
         options.addArguments("--remote-allow-origins=*");
+        if (isHeadlessModeEnabled()) {
+            options.addArguments("--headless=new");
+        }
         return new ChromeDriver(options);
     }
 }
