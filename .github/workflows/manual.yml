@@ -28,17 +28,17 @@ jobs:
       - name: Install Chrome Browser
         if: "contains(github.event.inputs.browser, 'Chrome')"
         run:   |
-            chmod +x ./scripts/InstallChrome.sh
+            chmod +x ./SeleniumProject/scripts/InstallChrome.sh
                         ./scripts/InstallChrome.sh
       - name: Install Firefox Browser
         if: "contains(github.event.inputs.browser, 'Firefox')"
         run:   |
-            chmod +x ./scripts/InstallFirefox.sh
+            chmod +x ./SeleniumProject/scripts/InstallFirefox.sh
                         ./scripts/InstallFirefox.sh
       - name: Install Edge Browser
         if: "contains(github.event.inputs.browser, 'Edge')"
         run:   |
-            chmod +x ./scripts/InstallEdge.sh
+            chmod +x ./SeleniumProject/scripts/InstallEdge.sh
                         ./scripts/InstallEdge.sh
       - name: Build and install with Maven
         run: mvn clean install --file ./SeleniumProject/pom.xml -DskipTests
