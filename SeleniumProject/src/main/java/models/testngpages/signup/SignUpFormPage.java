@@ -1,9 +1,14 @@
-package models.testngpages;
+package models.testngpages.signup;
 
+import models.testngpages.MainPage;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class SignUpFormPage extends MainPage {
+
+    private static final Log logger = LogFactory.getLog(SignUpFormPage.class);
 
     public static final String ROOT_CSS = "form[action='/sign-up']";
     private static final String EMAIL_INPUT_CSS = ROOT_CSS + " input[name='email']";
@@ -17,30 +22,32 @@ public class SignUpFormPage extends MainPage {
     }
 
     public SignUpFormPage inputEmail(String emailAddress) {
-        driver.findElement(By.cssSelector(EMAIL_INPUT_CSS)).clear();
-        driver.findElement(By.cssSelector(EMAIL_INPUT_CSS)).sendKeys(emailAddress);
+        logger.info("Input email");
+        fillField(By.cssSelector(EMAIL_INPUT_CSS), emailAddress);
         return this;
     }
 
     public SignUpFormPage inputPassword(String password) {
-        driver.findElement(By.cssSelector(PASSWORD_INPUT_CSS)).clear();
-        driver.findElement(By.cssSelector(PASSWORD_INPUT_CSS)).sendKeys(password);
+        logger.info("Input password");
+        fillField(By.cssSelector(PASSWORD_INPUT_CSS), password);
         return this;
     }
 
     public SignUpFormPage inputPasswordConfirmation(String password) {
-        driver.findElement(By.cssSelector(PASSWORD_CONFIRMATION_INPUT_CSS)).clear();
-        driver.findElement(By.cssSelector(PASSWORD_CONFIRMATION_INPUT_CSS)).sendKeys(password);
+        logger.info("Input password confirmation");
+        fillField(By.cssSelector(PASSWORD_CONFIRMATION_INPUT_CSS), password);
         return this;
     }
 
     public SignUpFormPage selectTermsAndConditionsCheckbox() {
-        driver.findElement(By.cssSelector(TERMS_AND_CONDITIONS_CHECKBOX_CSS)).click();
+        logger.info("Select 'Agree to terms and conditions' checkbox");
+        clickElement(By.cssSelector(TERMS_AND_CONDITIONS_CHECKBOX_CSS));
         return this;
     }
 
     public MainPage clickSignUp() {
-        driver.findElement(By.cssSelector(SIGN_UP_BUTTON_CSS)).click();
+        logger.info("Click 'Sign up' button");
+        clickElement(By.cssSelector(SIGN_UP_BUTTON_CSS));
         return new MainPage(driver);
     }
 

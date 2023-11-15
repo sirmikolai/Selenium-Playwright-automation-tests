@@ -1,11 +1,16 @@
-package models.testngpages;
+package models.testngpages.carbrand.carmodel;
 
-import models.CarModelClass;
+import models.enums.CarModelClass;
+import models.testngpages.MainPage;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class CarBrandModelsBrowsePage extends MainPage {
+
+    private static final Log logger = LogFactory.getLog(CarBrandModelsBrowsePage.class);
 
     public static final String ROOT_XPATH = "//div[@class='container']";
     private static final String ADD_CAR_MODEL_BUTTON_XPATH = ROOT_XPATH + "//a[contains(@href,'car-models/add-form')]";
@@ -23,31 +28,36 @@ public class CarBrandModelsBrowsePage extends MainPage {
     }
 
     public CarModelFormPage addCarModel() {
-        driver.findElement(By.xpath(ADD_CAR_MODEL_BUTTON_XPATH)).click();
+        logger.info("Click 'Add car model' button");
+        clickElement(By.xpath(ADD_CAR_MODEL_BUTTON_XPATH));
         seleniumWait.waitUntil(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(CarModelFormPage.ROOT_CSS)));
         return new CarModelFormPage(driver);
     }
 
     public boolean isRowWithCarModelNameVisible(String name) {
-        return !driver.findElements(By.xpath(String.format(ROW_BY_NAME_XPATH, name))).isEmpty();
+        logger.info(String.format("Check if row with car model name '%s' is visible", name));
+        return isElementDisplayedOnThePage(By.xpath(String.format(ROW_BY_NAME_XPATH, name)), 1);
     }
 
     public String getCarBrandLogoUrl() {
+        logger.info("Get car brand logo URL");
         seleniumWait.waitForPageInitialization();
-        seleniumWait.waitUntil(ExpectedConditions.visibilityOfElementLocated(By.xpath(CAR_BRAND_LOGO_URL_XPATH)));
-        return driver.findElement(By.xpath(CAR_BRAND_LOGO_URL_XPATH)).getAttribute("src");
+        return getAttributeValueFromElement(By.xpath(CAR_BRAND_LOGO_URL_XPATH), "src");
     }
 
     public String getCarBrandName() {
-        return driver.findElement(By.xpath(CAR_BRAND_NAME_XPATH)).getText();
+        logger.info("Get car brand name");
+        return getTextFromElement(By.xpath(CAR_BRAND_NAME_XPATH));
     }
 
     public String getCarModelNameForName(String name) {
-        return driver.findElement(By.xpath(String.format(CAR_MODEL_NAME_XPATH, name))).getText();
+        logger.info("Get car model name");
+        return getTextFromElement(By.xpath(String.format(CAR_MODEL_NAME_XPATH, name)));
     }
 
     public CarModelClass getCarModelClassForName(String name) {
-        String className = driver.findElement(By.xpath(String.format(CAR_MODEL_CLASS_XPATH, name))).getText();
+        logger.info(String.format("Get car model class for name %s", name));
+        String className = getTextFromElement(By.xpath(String.format(CAR_MODEL_CLASS_XPATH, name)));
         for (CarModelClass carModelClass : CarModelClass.values()) {
             if (className.equalsIgnoreCase(carModelClass.getDisplayedText())) {
                 return carModelClass;
@@ -57,22 +67,21 @@ public class CarBrandModelsBrowsePage extends MainPage {
     }
 
     public int getCarModelNumberOfGenerationsForName(String name) {
-        return Integer.parseInt(driver.findElement(By.xpath(String.format(CAR_MODEL_NUMBER_OF_GENERATIONS_XPATH, name))).getText());
+        logger.info(String.format("Get car model number of generations for name %s", name));
+        return Integer.parseInt(getTextFromElement(By.xpath(String.format(CAR_MODEL_NUMBER_OF_GENERATIONS_XPATH, name))));
     }
 
     public CarModelFormPage editCarModelForName(String name) {
-        scrollIntoView(driver.findElement(By.xpath(String.format(CAR_MODEL_EDIT_BUTTON_XPATH, name))));
-        seleniumWait.waitUntil(ExpectedConditions.elementToBeClickable(By.xpath(String.format(CAR_MODEL_EDIT_BUTTON_XPATH, name))));
-        clickElementBy(By.xpath(String.format(CAR_MODEL_EDIT_BUTTON_XPATH, name)));
+        logger.info(String.format("Click 'Edit car model' button for name %s", name));
+        clickElement(By.xpath(String.format(CAR_MODEL_EDIT_BUTTON_XPATH, name)));
         seleniumWait.waitUntil(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(CarModelFormPage.ROOT_CSS)));
         return new CarModelFormPage(driver);
     }
 
     public CarBrandModelsBrowsePage deleteCarModelForName(String name) {
-        scrollIntoView(driver.findElement(By.xpath(String.format(CAR_MODEL_DELETE_BUTTON_XPATH, name))));
-        seleniumWait.waitUntil(ExpectedConditions.elementToBeClickable(By.xpath(String.format(CAR_MODEL_DELETE_BUTTON_XPATH, name))));
-        clickElementBy(By.xpath(String.format(CAR_MODEL_DELETE_BUTTON_XPATH, name)));
-        driver.switchTo().alert().accept();
+        logger.info(String.format("Click 'Delete car model' button for name %s", name));
+        clickElement(By.xpath(String.format(CAR_MODEL_DELETE_BUTTON_XPATH, name)));
+        confirmAlertIfItPresent();
         return this;
     }
 

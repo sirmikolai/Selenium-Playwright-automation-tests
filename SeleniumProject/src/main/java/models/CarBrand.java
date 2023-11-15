@@ -15,11 +15,7 @@ public class CarBrand {
     private String headquarterCity;
     private String headquarterCountry;
 
-    private CarBrand() {
-
-    }
-
-    public CarBrand(String name, String logoUrl, int foundedYear, String officialSite, String headquarterCity, String headquarterCountry) {
+    private CarBrand(String name, String logoUrl, int foundedYear, String officialSite, String headquarterCity, String headquarterCountry) {
         this.name = name;
         this.logoUrl = logoUrl;
         this.foundedYear = foundedYear;

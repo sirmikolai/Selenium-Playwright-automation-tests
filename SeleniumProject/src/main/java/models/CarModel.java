@@ -1,5 +1,6 @@
 package models;
 
+import models.enums.CarModelClass;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Arrays;
@@ -12,11 +13,7 @@ public class CarModel {
     private CarModelClass carModelClass;
     private int numberOfGenerations;
 
-    private CarModel() {
-
-    }
-
-    public CarModel(CarBrand carBrand, String name, CarModelClass carModelClass, int numberOfGenerations) {
+    private CarModel(CarBrand carBrand, String name, CarModelClass carModelClass, int numberOfGenerations) {
         this.carBrand = carBrand;
         this.name = name;
         this.carModelClass = carModelClass;

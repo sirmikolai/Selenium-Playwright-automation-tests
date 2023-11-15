@@ -1,24 +1,23 @@
 package testngtests;
 
 import models.User;
-import models.UserGroup;
-import models.testngpages.SignInFormPage;
-import org.testng.Assert;
+import models.testngpages.signin.SignInFormPage;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import testngtests.abstractclasses.AbstractTest;
 
+import static models.enums.SystemAlerts.*;
+
 public class LoginTest extends AbstractTest {
 
     private User newUser = new User.UserBuilder().build();
-    private static final String DANGER_ALERT_INVALID_PASSWORD_TEXT = "Error! Invalid password.";
 
     @DataProvider(name = "userData")
     public Object[][] userData() {
         return new Object [][] {
                 { existedSimpleUser.getEmail(), existedSimpleUser.getPassword(), true, null },
-                { newUser.getEmail(), newUser.getPassword(), true, DANGER_ALERT_INVALID_EMAIL_TEXT },
-                { existedSimpleUser.getEmail(), newUser.getPassword(), true, DANGER_ALERT_INVALID_PASSWORD_TEXT },
+                { newUser.getEmail(), newUser.getPassword(), true, DANGER_ALERT_INVALID_CREDENTIALS_TEXT.getAlertText()},
+                { existedSimpleUser.getEmail(), newUser.getPassword(), true, DANGER_ALERT_INVALID_CREDENTIALS_TEXT.getAlertText() },
                 { null, null, false, null },
         };
     }
@@ -33,14 +32,14 @@ public class LoginTest extends AbstractTest {
             signInFormPage.inputPassword(password);
         }
         signInFormPage.clickSignIn();
-        Assert.assertEquals(mainPage.isFormWasValidatedWithSuccess(), isCorrectValidation);
+        assertThatFormWasValidatedWithSuccess(isCorrectValidation);
         if (isCorrectValidation && dangerAlertText == null) {
-            Assert.assertEquals(mainPage.getTextFromSuccessAlert(), SUCCESS_ALERT_LOGIN_TEXT);
+            assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_LOGIN_TEXT.getAlertText());
             mainPage.clickSignOut();
-            Assert.assertEquals(mainPage.getTextFromSuccessAlert(), SUCCESS_ALERT_SIGN_OUT_TEXT);
+            assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_SIGN_OUT_TEXT.getAlertText());
         }
         if (dangerAlertText != null) {
-            Assert.assertEquals(mainPage.getTextFromDangerAlert(), dangerAlertText);
+            assertThatDangerAlertHasExpectedText(dangerAlertText);
         }
     }
 

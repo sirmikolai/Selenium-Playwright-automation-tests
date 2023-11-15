@@ -1,34 +1,31 @@
 package testngtests;
 
 import models.CarBrand;
-import models.testngpages.CarBrandFormPage;
-import org.testng.Assert;
+import models.testngpages.carbrand.CarBrandFormPage;
+import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
 import testngtests.abstractclasses.AbstractTest;
+
+import static models.enums.SystemAlerts.*;
 
 public class CarBrandTest extends AbstractTest {
 
     private CarBrand newCarBrand = new CarBrand.CarBrandBuilder().build();
-    private static final String SUCCESS_ALERT_UPDATED_CAR_BRAND_TEXT = "Success! Car brand has been updated.";
     private CarBrandFormPage carBrandFormPage;
 
     @Test
     public void addingCarBrandTest() {
         signIn(existedSimpleUser);
-        carBrandFormPage = mainPage.goToAddingCarBrandForm();
+        carBrandFormPage = mainPage.clickAddCarBrand();
         carBrandFormPage.inputName(newCarBrand.getName())
                 .inputLogoUrl(newCarBrand.getLogoUrl())
                 .inputFoundedYear(newCarBrand.getFoundedYear())
                 .inputOfficialSite(newCarBrand.getOfficialSite())
-                .inputHeadQuarterCity(newCarBrand.getHeadquarterCity())
-                .inputHeadquarterCountry(newCarBrand.getHeadquarterCountry());
-        carBrandFormPage.submit();
-        Assert.assertEquals(mainPage.getTextFromSuccessAlert(), SUCCESS_ALERT_ADDED_CAR_BRAND_TEXT);
-        Assert.assertEquals(carBrandsBrowsePage.getCarBrandNameForName(newCarBrand.getName()), newCarBrand.getName());
-        Assert.assertEquals(carBrandsBrowsePage.getCarBrandFoundedYearForName(newCarBrand.getName()), newCarBrand.getFoundedYear());
-        Assert.assertEquals(carBrandsBrowsePage.getCarBrandLogoUrlName(newCarBrand.getName()), newCarBrand.getLogoUrl());
-        Assert.assertEquals(carBrandsBrowsePage.getCarBrandHeadquarterForName(newCarBrand.getName()), newCarBrand.getHeadquarter());
-        Assert.assertEquals(carBrandsBrowsePage.getCarBrandOfficialSiteForName(newCarBrand.getName()), newCarBrand.getOfficialSite());
+                .inputHeadquarterCity(newCarBrand.getHeadquarterCity())
+                .inputHeadquarterCountry(newCarBrand.getHeadquarterCountry())
+                .submit();
+        assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_ADDED_CAR_BRAND_TEXT.getAlertText());
+        assertThatCarBrandExistAndHasExpectedData(newCarBrand);
     }
 
     @Test(dependsOnMethods = "addingCarBrandTest")
@@ -39,22 +36,63 @@ public class CarBrandTest extends AbstractTest {
                 .inputLogoUrl(newCarBrand.getLogoUrl())
                 .inputFoundedYear(newCarBrand.getFoundedYear())
                 .inputOfficialSite(newCarBrand.getOfficialSite())
-                .inputHeadQuarterCity(newCarBrand.getHeadquarterCity())
-                .inputHeadquarterCountry(newCarBrand.getHeadquarterCountry());
-        carBrandFormPage.submit();
-        Assert.assertEquals(mainPage.getTextFromSuccessAlert(), SUCCESS_ALERT_UPDATED_CAR_BRAND_TEXT);
-        Assert.assertEquals(carBrandsBrowsePage.getCarBrandNameForName(newCarBrand.getName()), newCarBrand.getName());
-        Assert.assertEquals(carBrandsBrowsePage.getCarBrandFoundedYearForName(newCarBrand.getName()), newCarBrand.getFoundedYear());
-        Assert.assertEquals(carBrandsBrowsePage.getCarBrandLogoUrlName(newCarBrand.getName()), newCarBrand.getLogoUrl());
-        Assert.assertEquals(carBrandsBrowsePage.getCarBrandHeadquarterForName(newCarBrand.getName()), newCarBrand.getHeadquarter());
-        Assert.assertEquals(carBrandsBrowsePage.getCarBrandOfficialSiteForName(newCarBrand.getName()), newCarBrand.getOfficialSite());
+                .inputHeadquarterCity(newCarBrand.getHeadquarterCity())
+                .inputHeadquarterCountry(newCarBrand.getHeadquarterCountry())
+                .submit();
+        assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_UPDATED_CAR_BRAND_TEXT.getAlertText());
+        assertThatCarBrandExistAndHasExpectedData(newCarBrand);
     }
 
     @Test(dependsOnMethods = {"addingCarBrandTest", "editCarBrandTest"})
     public void deleteCarBrandTest() {
         carBrandsBrowsePage.deleteCarBrandForName(newCarBrand.getName());
-        Assert.assertEquals(mainPage.getTextFromSuccessAlert(), SUCCESS_ALERT_DELETED_CAR_BRAND_TEXT);
-        Assert.assertFalse(carBrandsBrowsePage.isCardWithCarBrandNameVisible(newCarBrand.getName()));
+        assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_DELETED_CAR_BRAND_TEXT.getAlertText());
+        assertThatCarBrandIsExistOrNot(newCarBrand, false);
+    }
+
+    private void assertThatCarBrandExistAndHasExpectedData(CarBrand carBrand) {
+        assertThatCarBrandIsExistOrNot(carBrand, true);
+        assertThatCarBrandNameIsExpected(carBrand);
+        assertThatCarBrandFoundedYearIsExpected(carBrand);
+        assertThatCarBrandLogoUrlIsExpected(carBrand);
+        assertThatCarBrandHeadquarterIsExpected(carBrand);
+        assertThatCarBrandOfficialSiteIsExpected(carBrand);
+    }
+
+    private void assertThatCarBrandNameIsExpected(CarBrand carBrand) {
+        Assertions.assertThat(carBrandsBrowsePage.getCarBrandNameForName(carBrand.getName()))
+                .as(String.format("Assert that car brand has name: %s", carBrand.getName()))
+                .isEqualToIgnoringCase(carBrand.getName());
+    }
+
+    private void assertThatCarBrandFoundedYearIsExpected(CarBrand carBrand) {
+        Assertions.assertThat(carBrandsBrowsePage.getCarBrandFoundedYearForName(carBrand.getName()))
+                .as(String.format("Assert that car brand has founded year: %d", carBrand.getFoundedYear()))
+                .isEqualTo(carBrand.getFoundedYear());
+    }
+
+    private void assertThatCarBrandLogoUrlIsExpected(CarBrand carBrand) {
+        Assertions.assertThat(carBrandsBrowsePage.getCarBrandLogoUrlName(carBrand.getName()))
+                .as(String.format("Assert that car brand has logo URL: %s", carBrand.getLogoUrl()))
+                .isEqualTo(carBrand.getLogoUrl());
+    }
+
+    private void assertThatCarBrandHeadquarterIsExpected(CarBrand carBrand) {
+        Assertions.assertThat(carBrandsBrowsePage.getCarBrandHeadquarterForName(carBrand.getName()))
+                .as(String.format("Assert that car brand has headquarter: %s", carBrand.getHeadquarter()))
+                .isEqualTo(carBrand.getHeadquarter());
+    }
+
+    private void assertThatCarBrandOfficialSiteIsExpected(CarBrand carBrand) {
+        Assertions.assertThat(carBrandsBrowsePage.getCarBrandOfficialSiteForName(carBrand.getName()))
+                .as(String.format("Assert that car brand has official site: %s", carBrand.getOfficialSite()))
+                .isEqualTo(carBrand.getOfficialSite());
+    }
+
+    private void assertThatCarBrandIsExistOrNot(CarBrand carBrand, boolean shouldExist) {
+        Assertions.assertThat(carBrandsBrowsePage.isCardWithCarBrandNameVisible(carBrand.getName()))
+                .as(String.format("Assert that car brand with name %s is exist: %s", carBrand.getName(), shouldExist))
+                .isEqualTo(shouldExist);
     }
 
 }

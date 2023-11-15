@@ -1,10 +1,13 @@
 package testngtests;
 
-import models.testngpages.AdminPanelPage;
-import org.testng.Assert;
+import models.testngpages.adminpanel.AdminPanelPage;
+import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
 import testngtests.abstractclasses.AbstractTest;
+
 import java.util.List;
+
+import static models.enums.SystemAlerts.SUCCESS_ALERT_USER_REMOVED_TEXT;
 
 public class RemovingUsersTest extends AbstractTest {
 
@@ -15,11 +18,17 @@ public class RemovingUsersTest extends AbstractTest {
         signIn(existedAdminUser);
         adminPanelPage = mainPage.goToAdminPanel();
         List<String> usersToDelete = adminPanelPage.getUsersEmailsToDelete();
-        for (String email: usersToDelete) {
+        usersToDelete.forEach(email -> {
             adminPanelPage.deleteUserByEmail(email);
-            Assert.assertEquals(adminPanelPage.getTextFromSuccessAlert(), SUCCESS_ALERT_USER_REMOVED_TEXT);
-            Assert.assertFalse(adminPanelPage.isRowForUserWithEmailExist(email));
-        }
+            assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_USER_REMOVED_TEXT.getAlertText());
+            assertThatRowWithUserIsExistOrNot(email, false);
+        });
+    }
+
+    private void assertThatRowWithUserIsExistOrNot(String userEmail, boolean shouldExist) {
+        Assertions.assertThat(adminPanelPage.isRowForUserWithEmailExist(userEmail))
+                .as(String.format("Assert that row for expected user is exist: %s", shouldExist))
+                .isEqualTo(shouldExist);
     }
 
 }

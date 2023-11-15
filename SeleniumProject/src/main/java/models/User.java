@@ -1,5 +1,7 @@
 package models;
 
+import models.enums.UserGroup;
+
 import static core.mailosaur.MailosaurServerManager.generateEmailAddress;
 import static models.generators.PasswordGenerator.generatePassword;
 
@@ -9,17 +11,7 @@ public class User {
     private String password;
     private UserGroup userGroup;
 
-    private User() {
-
-    }
-
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
-        this.userGroup = UserGroup.USER;
-    }
-
-    public User(String email, String password, UserGroup userGroup) {
+    private User(String email, String password, UserGroup userGroup) {
         this.email = email;
         this.password = password;
         this.userGroup = userGroup;

@@ -1,21 +1,20 @@
 package testngtests;
 
 import models.CarModel;
-import models.testngpages.CarBrandFormPage;
-import models.testngpages.CarBrandModelsBrowsePage;
-import models.testngpages.CarModelFormPage;
+import models.testngpages.carbrand.CarBrandFormPage;
+import models.testngpages.carbrand.carmodel.CarBrandModelsBrowsePage;
+import models.testngpages.carbrand.carmodel.CarModelFormPage;
+import org.assertj.core.api.Assertions;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import testngtests.abstractclasses.AbstractTest;
+
+import static models.enums.SystemAlerts.*;
 
 public class CarModelTest extends AbstractTest {
 
     private CarModel newCarModel = new CarModel.CarModelBuilder().build();
-    private static final String SUCCESS_ALERT_ADDED_CAR_MODEL_TEXT = "Success! Car model has been added.";
-    private static final String SUCCESS_ALERT_UPDATED_CAR_MODEL_TEXT = "Success! Car model has been updated.";
-    private static final String SUCCESS_ALERT_DELETED_CAR_MODEL_TEXT = "Success! Car model has been removed.";
     private CarBrandFormPage carBrandFormPage;
     private CarBrandModelsBrowsePage carBrandModelsBrowsePage;
     private CarModelFormPage carModelFormPage;
@@ -23,18 +22,18 @@ public class CarModelTest extends AbstractTest {
     @BeforeClass
     public void prepareCarBrandForTest() {
         signIn(existedSimpleUser);
-        carBrandFormPage = mainPage.goToAddingCarBrandForm();
+        carBrandFormPage = mainPage.clickAddCarBrand();
         carBrandFormPage.inputName(newCarModel.getCarBrand().getName())
                 .inputLogoUrl(newCarModel.getCarBrand().getLogoUrl())
                 .inputFoundedYear(newCarModel.getCarBrand().getFoundedYear())
                 .inputOfficialSite(newCarModel.getCarBrand().getOfficialSite())
-                .inputHeadQuarterCity(newCarModel.getCarBrand().getHeadquarterCity())
+                .inputHeadquarterCity(newCarModel.getCarBrand().getHeadquarterCity())
                 .inputHeadquarterCountry(newCarModel.getCarBrand().getHeadquarterCountry());
         carBrandFormPage.submit();
-        Assert.assertEquals(mainPage.getTextFromSuccessAlert(), SUCCESS_ALERT_ADDED_CAR_BRAND_TEXT);
+        assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_ADDED_CAR_BRAND_TEXT.getAlertText());
         carBrandModelsBrowsePage = carBrandsBrowsePage.viewCarBrandModelsForName(newCarModel.getCarBrand().getName());
-        Assert.assertEquals(carBrandModelsBrowsePage.getCarBrandLogoUrl(), newCarModel.getCarBrand().getLogoUrl());
-        Assert.assertEquals(carBrandModelsBrowsePage.getCarBrandName(), newCarModel.getCarBrand().getName());
+        assertThatCarBrandNameIsExpected(newCarModel);
+        assertThatCarBrandLogoUrlIsExpected(newCarModel);
     }
 
     @Test
@@ -44,10 +43,8 @@ public class CarModelTest extends AbstractTest {
                 .selectClass(newCarModel.getCarModelClass())
                 .inputNumberOfGenerations(newCarModel.getNumberOfGenerations());
         carModelFormPage.submit();
-        Assert.assertEquals(carBrandModelsBrowsePage.getTextFromSuccessAlert(), SUCCESS_ALERT_ADDED_CAR_MODEL_TEXT);
-        Assert.assertEquals(carBrandModelsBrowsePage.getCarModelNameForName(newCarModel.getName()), newCarModel.getName());
-        Assert.assertEquals(carBrandModelsBrowsePage.getCarModelClassForName(newCarModel.getName()), newCarModel.getCarModelClass());
-        Assert.assertEquals(carBrandModelsBrowsePage.getCarModelNumberOfGenerationsForName(newCarModel.getName()), newCarModel.getNumberOfGenerations());
+        assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_ADDED_CAR_MODEL_TEXT.getAlertText());
+        assertThatCarModelExistAndHasExpectedData(newCarModel);
     }
 
     @Test(dependsOnMethods = "addingCarModelTest")
@@ -58,17 +55,54 @@ public class CarModelTest extends AbstractTest {
                 .selectClass(newCarModel.getCarModelClass())
                 .inputNumberOfGenerations(newCarModel.getNumberOfGenerations());
         carModelFormPage.submit();
-        Assert.assertEquals(carBrandModelsBrowsePage.getTextFromSuccessAlert(), SUCCESS_ALERT_UPDATED_CAR_MODEL_TEXT);
-        Assert.assertEquals(carBrandModelsBrowsePage.getCarModelNameForName(newCarModel.getName()), newCarModel.getName());
-        Assert.assertEquals(carBrandModelsBrowsePage.getCarModelClassForName(newCarModel.getName()), newCarModel.getCarModelClass());
-        Assert.assertEquals(carBrandModelsBrowsePage.getCarModelNumberOfGenerationsForName(newCarModel.getName()), newCarModel.getNumberOfGenerations());
+        assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_UPDATED_CAR_MODEL_TEXT.getAlertText());
+        assertThatCarModelExistAndHasExpectedData(newCarModel);
     }
 
     @Test(dependsOnMethods = {"addingCarModelTest", "editCarModelTest"})
-    public void deleteCarBrandTest() {
+    public void deleteCarModelTest() {
         carBrandModelsBrowsePage.deleteCarModelForName(newCarModel.getName());
-        Assert.assertEquals(carBrandModelsBrowsePage.getTextFromSuccessAlert(), SUCCESS_ALERT_DELETED_CAR_MODEL_TEXT);
+        assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_DELETED_CAR_MODEL_TEXT.getAlertText());
+        assertThatCarModelIsExistOrNot(newCarModel, false);
         Assert.assertFalse(carBrandModelsBrowsePage.isRowWithCarModelNameVisible(newCarModel.getName()));
+    }
+
+    private void assertThatCarModelExistAndHasExpectedData(CarModel carModel) {
+        assertThatCarModelIsExistOrNot(carModel, true);
+        assertThatCarBrandNameIsExpected(carModel);
+        assertThatCarBrandLogoUrlIsExpected(carModel);
+        assertThatCarModelNameIsExpected(carModel);
+        assertThatCarModelNumberOfGenerationsIsExpected(carModel);
+    }
+
+    private void assertThatCarBrandNameIsExpected(CarModel carModel) {
+        Assertions.assertThat(carBrandModelsBrowsePage.getCarBrandName())
+                .as(String.format("Assert that car brand has name: %s", carModel.getCarBrand().getName()))
+                .isEqualToIgnoringCase(carModel.getCarBrand().getName());
+    }
+
+    private void assertThatCarBrandLogoUrlIsExpected(CarModel carModel) {
+        Assertions.assertThat(carBrandModelsBrowsePage.getCarBrandLogoUrl())
+                .as(String.format("Assert that car brand has logo URL: %s", carModel.getCarBrand().getLogoUrl()))
+                .isEqualTo(carModel.getCarBrand().getLogoUrl());
+    }
+
+    private void assertThatCarModelNameIsExpected(CarModel carModel) {
+        Assertions.assertThat(carBrandModelsBrowsePage.getCarModelNameForName(carModel.getName()))
+                .as(String.format("Assert that car brand has founded year: %s", carModel.getName()))
+                .isEqualTo(carModel.getName());
+    }
+
+    private void assertThatCarModelNumberOfGenerationsIsExpected(CarModel carModel) {
+        Assertions.assertThat(carBrandModelsBrowsePage.getCarModelNumberOfGenerationsForName(carModel.getName()))
+                .as(String.format("Assert that car brand has official site: %s", carModel.getNumberOfGenerations()))
+                .isEqualTo(carModel.getNumberOfGenerations());
+    }
+
+    private void assertThatCarModelIsExistOrNot(CarModel carModel, boolean shouldExist) {
+        Assertions.assertThat(carBrandModelsBrowsePage.isRowWithCarModelNameVisible(carModel.getName()))
+                .as(String.format("Assert that car model with name %s is exist %s", carModel.getName(), shouldExist))
+                .isEqualTo(shouldExist);
     }
 
 }

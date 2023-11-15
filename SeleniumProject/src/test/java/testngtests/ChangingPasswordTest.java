@@ -2,20 +2,21 @@ package testngtests;
 
 import com.mailosaur.MailosaurException;
 import models.User;
-import models.testngpages.ResetPasswordFormPage;
-import org.testng.Assert;
-import org.testng.annotations.*;
+import models.testngpages.resetpassword.ResetPasswordFormPage;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 import testngtests.abstractclasses.AbstractTest;
 
 import java.io.IOException;
 
+import static models.enums.SystemAlerts.DANGER_ALERT_INCORRECT_CURRENT_PASSWORD_TEXT;
+import static models.enums.SystemAlerts.SUCCESS_ALERT_PASSWORD_CHANGED_TEXT;
 import static models.generators.PasswordGenerator.generatePassword;
 
 public class ChangingPasswordTest extends AbstractTest {
 
     private User newUser = new User.UserBuilder().build();
-    private static final String SUCCESS_ALERT_PASSWORD_CHANGED_TEXT = "Success! Your password has been changed.";
-    private static final String DANGER_ALERT_INCORRECT_CURRENT_PASSWORD_TEXT = "Error! Incorrect current password!";
     private static final String newPassword = generatePassword(10);
     private ResetPasswordFormPage resetPasswordFormPage;
 
@@ -28,7 +29,7 @@ public class ChangingPasswordTest extends AbstractTest {
     @DataProvider(name = "userData")
     public Object[][] userData() {
         return new Object [][] {
-                { newPassword, newUser.getPassword(), newUser.getPassword(), true, DANGER_ALERT_INCORRECT_CURRENT_PASSWORD_TEXT },
+                { newPassword, newUser.getPassword(), newUser.getPassword(), true, DANGER_ALERT_INCORRECT_CURRENT_PASSWORD_TEXT.getAlertText() },
                 { newUser.getPassword(), newUser.getPassword(), newPassword, false, null },
                 { newUser.getPassword(), newPassword, newPassword, true, null }
         };
@@ -41,12 +42,12 @@ public class ChangingPasswordTest extends AbstractTest {
                 .inputNewPassword(newPassword)
                 .inputNewPasswordConfirmation(passwordConfirmation);
         resetPasswordFormPage.clickConfirm();
-        Assert.assertEquals(resetPasswordFormPage.isFormWasValidatedWithSuccess(), isCorrectValidation);
+        assertThatFormWasValidatedWithSuccess(isCorrectValidation);
         if (isCorrectValidation && dangerAlertText == null) {
-            Assert.assertEquals(mainPage.getTextFromSuccessAlert(), SUCCESS_ALERT_PASSWORD_CHANGED_TEXT);
+            assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_PASSWORD_CHANGED_TEXT.getAlertText());
         }
         if (dangerAlertText != null) {
-            Assert.assertEquals(mainPage.getTextFromDangerAlert(), dangerAlertText);
+            assertThatDangerAlertHasExpectedText(dangerAlertText);
         }
 
     }

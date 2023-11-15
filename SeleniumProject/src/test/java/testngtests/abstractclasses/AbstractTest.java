@@ -7,11 +7,15 @@ import core.browser.BrowserType;
 import core.waits.SeleniumWait;
 import core.webdriver.*;
 import models.User;
-import models.UserGroup;
-import models.testngpages.*;
+import models.enums.UserGroup;
+import models.testngpages.AbstractPage;
+import models.testngpages.MainPage;
+import models.testngpages.carbrand.CarBrandsBrowsePage;
+import models.testngpages.signin.SignInFormPage;
+import models.testngpages.signup.SignUpFormPage;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -21,36 +25,31 @@ import java.lang.reflect.InvocationTargetException;
 
 import static core.mailosaur.MailosaurMessageManager.getLinkFromMessage;
 import static core.mailosaur.MailosaurServerManager.getEmailByRecipientName;
+import static models.enums.SystemAlerts.*;
+import static utils.LogBinder.bindLogName;
+import static utils.LogBinder.unbind;
 
 
 public abstract class AbstractTest implements PomParams {
 
     private WebDriver driver;
+    private static ThreadLocal<WebDriver> threadLocalDriver = new ThreadLocal<>();
     private SeleniumWait seleniumWait;
     private static final String BASE_URL = "https://car-info-app.onrender.com/";
     protected MainPage mainPage;
     protected CarBrandsBrowsePage carBrandsBrowsePage;
     protected User existedAdminUser = new User.UserBuilder(UserGroup.ADMIN).build();
     protected User existedSimpleUser = new User.UserBuilder(UserGroup.USER).build();
-    protected static final String SUCCESS_ALERT_REGISTRATION_TEXT = "Success! Confirmation email has been sent. Check your spam folder as well just in case.";
-    protected static final String SUCCESS_ALERT_CONFIRMATION_EMAIL_ADDRESS_TEXT = "Success! Your account has been activated! Now, you can sign in.";
-    protected static final String SUCCESS_ALERT_LOGIN_TEXT = "Success! You have been signed in correctly.";
-    protected static final String DANGER_ALERT_INVALID_EMAIL_TEXT = "Error! Invalid email address.";
-    protected static final String SUCCESS_ALERT_SIGN_OUT_TEXT = "Success! You have been signed out correctly.";
-    protected static final String SUCCESS_ALERT_USER_REMOVED_TEXT = "Success! User has been removed.";
-    protected static final String SUCCESS_ALERT_ADDED_CAR_BRAND_TEXT = "Success! Car brand has been added.";
-    protected static final String SUCCESS_ALERT_DELETED_CAR_BRAND_TEXT = "Success! Car brand has been removed.";
-    private String attemptNumber;
     private String testClassName;
-    private double startTime;
-    private double endTime;
 
     public void setUp(ITestContext iTestContext) {
         this.testClassName = iTestContext.getAllTestMethods()[0].getTestClass().getName().substring(StringUtils.lastIndexOf(iTestContext.getAllTestMethods()[0].getTestClass().getName(), ".") + 1);
-        this.attemptNumber = iTestContext.getName();
+        bindLogName(testClassName);
         this.driver = getBrowser();
+        threadLocalDriver.set(driver);
         this.seleniumWait = new SeleniumWait(driver);
         mainPage = openPageWithUrl(BASE_URL, MainPage.class);
+        assertThatMainPageIsVisible();
         carBrandsBrowsePage = new CarBrandsBrowsePage(driver);
     }
 
@@ -68,6 +67,10 @@ public abstract class AbstractTest implements PomParams {
             default:
                 return new Browser(new ChromeDriverFactory()).getDriver();
         }
+    }
+
+    public static WebDriver getDriverFromThreadLocal() {
+        return threadLocalDriver.get();
     }
 
     protected  <T extends AbstractPage> T openPageWithUrl(String url, Class<T> clazz) {
@@ -90,11 +93,11 @@ public abstract class AbstractTest implements PomParams {
         signUpFormPage.inputPasswordConfirmation(user.getPassword());
         signUpFormPage.selectTermsAndConditionsCheckbox();
         signUpFormPage.clickSignUp();
-        Assert.assertTrue(mainPage.isFormWasValidatedWithSuccess());
-        Assert.assertEquals(mainPage.getTextFromSuccessAlert(), SUCCESS_ALERT_REGISTRATION_TEXT);
+        assertThatFormWasValidatedWithSuccess(true);
+        assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_REGISTRATION_TEXT.getAlertText());
         String confirmationUrl = getLinkFromMessage(getEmailByRecipientName(user.getEmail()));
         mainPage = openPageWithUrl(confirmationUrl, MainPage.class);
-        Assert.assertEquals(mainPage.getTextFromSuccessAlert(), SUCCESS_ALERT_CONFIRMATION_EMAIL_ADDRESS_TEXT);
+        assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_CONFIRMATION_EMAIL_ADDRESS_TEXT.getAlertText());
     }
 
     protected void signIn(User user, boolean... withError) {
@@ -102,22 +105,45 @@ public abstract class AbstractTest implements PomParams {
         signInFormPage.inputEmail(user.getEmail());
         signInFormPage.inputPassword(user.getPassword());
         signInFormPage.clickSignIn();
-        Assert.assertTrue(mainPage.isFormWasValidatedWithSuccess());
+        assertThatFormWasValidatedWithSuccess(true);
         if (withError.length == 0) {
-            Assert.assertEquals(mainPage.getTextFromSuccessAlert(), SUCCESS_ALERT_LOGIN_TEXT);
+            assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_LOGIN_TEXT.getAlertText());
         } else {
-            Assert.assertEquals(mainPage.getTextFromDangerAlert(), DANGER_ALERT_INVALID_EMAIL_TEXT);
+            assertThatDangerAlertHasExpectedText(DANGER_ALERT_INVALID_CREDENTIALS_TEXT.getAlertText());
         }
     }
 
     protected void signOut() {
         mainPage.clickSignOut();
-        Assert.assertEquals(mainPage.getTextFromSuccessAlert(), SUCCESS_ALERT_SIGN_OUT_TEXT);
+        assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_SIGN_OUT_TEXT.getAlertText());
+    }
+
+    protected void assertThatSuccessAlertHasExpectedText(String text) {
+        Assertions.assertThat(mainPage.getTextFromSuccessAlert())
+                .as("Assert that success alert has text: " + text)
+                .isEqualToIgnoringCase(text);
+    }
+
+    protected void assertThatDangerAlertHasExpectedText(String text) {
+        Assertions.assertThat(mainPage.getTextFromDangerAlert())
+                .as("Assert that danger alert has text: " + text)
+                .isEqualToIgnoringCase(text);
+    }
+
+    protected void assertThatFormWasValidatedWithSuccess(boolean withSuccess) {
+        Assertions.assertThat(mainPage.isFormWasValidatedWithSuccess())
+                .as("Assert that form was validated with success: " + withSuccess)
+                .isEqualTo(withSuccess);
+    }
+
+    protected void assertThatMainPageIsVisible() {
+        Assertions.assertThat(mainPage.isMainPageVisible())
+                .as("Assert that main page is visible")
+                .isTrue();
     }
 
     @BeforeClass
     public void initialize(ITestContext iTestContext) {
-        startTime = System.currentTimeMillis();
         setUp(iTestContext);
     }
 
@@ -125,10 +151,7 @@ public abstract class AbstractTest implements PomParams {
     public void quitDriver() {
         if (driver != null) {
             driver.quit();
+            unbind();
         }
-        endTime = System.currentTimeMillis();
-        double testExecutionTimeInSeconds = (endTime - startTime)/1000.0;
-        System.out.println("Czas wykonania testu " + testClassName + " (" + getBrowserType() + ") " +
-                "- numer próby (" + attemptNumber + "): " + testExecutionTimeInSeconds + " [s]" );
     }
 }
