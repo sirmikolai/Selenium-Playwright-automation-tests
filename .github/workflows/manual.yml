@@ -1,4 +1,5 @@
 name: Manual test runner
+
 on:
   workflow_dispatch:
     inputs:
@@ -12,7 +13,9 @@ on:
         - Edge
 jobs:
   Execute-tests:
+  
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
