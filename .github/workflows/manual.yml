@@ -13,6 +13,14 @@ on:
         - Edge
 
 jobs:
+  Build-project:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Build and install with Maven
+        run: mvn clean install --file ./SeleniumProject/pom.xml -DskipTests
+  
   Execute-tests:
 
     runs-on: ubuntu-latest
