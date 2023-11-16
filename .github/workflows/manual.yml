@@ -25,6 +25,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+          skip: true
       - name: Build and install with Maven
         run: mvn clean install --file ./SeleniumProject/pom.xml -DskipTests
         
