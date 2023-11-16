@@ -25,6 +25,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+        if: ${{ env.JAVA_HOME }} == ''
       - name: Build and install with Maven
         run: mvn clean install --file ./SeleniumProject/pom.xml -DskipTests
         
@@ -63,6 +64,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+        if: ${{ env.JAVA_HOME }} == ''
       - uses: actions/checkout@v3
       - name: Initialize App server
         run: mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=initializeappserversuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
@@ -79,6 +81,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+        if: ${{ env.JAVA_HOME }} == ''
       - uses: actions/checkout@v3
       - name: Run all E2E tests
         run: mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
@@ -94,6 +97,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+        if: ${{ env.JAVA_HOME }} == ''
       - uses: actions/checkout@v3
       - name: Remove test data
         run: mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=removetestdatasuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
