@@ -58,6 +58,8 @@ jobs:
     needs: Install-browser
     steps:
       - uses: actions/checkout@v3
+      - name: Set JAVA_HOME
+        run: echo "JAVA_HOME=${{ runner.tool_cache }}/jdk-17" >> $GITHUB_ENV
       - name: Initialize App server
         run: mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=initializeappserversuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
 
@@ -68,6 +70,8 @@ jobs:
     needs: Initialize-app-server
     steps:
       - uses: actions/checkout@v3
+      - name: Set JAVA_HOME
+        run: echo "JAVA_HOME=${{ runner.tool_cache }}/jdk-17" >> $GITHUB_ENV
       - name: Run all E2E tests
         run: mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
   Remove-test-data:
@@ -77,5 +81,7 @@ jobs:
     needs: Execute-E2E-tests
     steps:
       - uses: actions/checkout@v3
+      - name: Set JAVA_HOME
+        run: echo "JAVA_HOME=${{ runner.tool_cache }}/jdk-17" >> $GITHUB_ENV
       - name: Remove test data
         run: mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=removetestdatasuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
