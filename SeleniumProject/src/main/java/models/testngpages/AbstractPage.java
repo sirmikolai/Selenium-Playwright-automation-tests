@@ -44,10 +44,10 @@ public abstract class AbstractPage implements PomParams {
         try {
             WebElement element = driver.findElement(elementPath);
             scrollIntoViewIfElementIsNotInViewPort(element);
-            seleniumWait.waitUntil(ExpectedConditions.elementToBeClickable(element));
+            seleniumWait.waitUntil(ExpectedConditions.visibilityOf(element));
             element.click();
         } catch (Exception e) {
-            seleniumWait.waitUntil(ExpectedConditions.elementToBeClickable(elementPath));
+            seleniumWait.waitUntil(ExpectedConditions.visibilityOfElementLocated(elementPath));
             WebElement element = driver.findElement(elementPath);
             scrollIntoViewIfElementIsNotInViewPort(element);
             jsExecutor.executeScript("arguments[0].click()", element);
