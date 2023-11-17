@@ -45,8 +45,6 @@ jobs:
       - name: Install Edge Browser
         if: "contains(github.event.inputs.browser, 'Edge')"
         uses: browser-actions/setup-edge@v1
-      - name: Set resolution
-        run: xrandr -s 1920x1080
 
   Initialize-app-server:
 
@@ -62,8 +60,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
         if: ${{ env.JAVA_HOME }} == ''
-      - name: Set resolution
-        run: xrandr -s 1920x1080
       - name: Initialize App server
         run: mvn clean install --file ./SeleniumProject/pom.xml -DsuiteFile=initializeappserversuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
 
@@ -81,8 +77,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
         if: ${{ env.JAVA_HOME }} == ''
-      - name: Set resolution
-        run: xrandr -s 1920x1080
       - name: Run all E2E tests
         run: mvn clean install --file ./SeleniumProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
   Remove-test-data:
@@ -100,7 +94,5 @@ jobs:
           distribution: 'temurin'
           cache: maven
         if: ${{ env.JAVA_HOME }} == ''
-      - name: Set resolution
-        run: xrandr -s 1920x1080
       - name: Remove test data
         run: mvn clean install --file ./SeleniumProject/pom.xml -DsuiteFile=removetestdatasuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
