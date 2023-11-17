@@ -32,31 +32,33 @@ public abstract class AbstractPage implements PomParams {
         }
     }
 
-    private void scrollIntoViewIfElementIsNotInViewPort(final WebElement element) {
-        if (!seleniumWait.checkIfElementIsVisibleInViewPort(element, 2)) {
-            seleniumWait.waitUntil(ExpectedConditions.visibilityOf(element));
-            jsExecutor = (JavascriptExecutor) driver;
-            jsExecutor.executeScript("arguments[0].scrollIntoView();", element);
-        }
+    private void scrollIntoView(final WebElement element) {
+        seleniumWait.waitUntil(ExpectedConditions.visibilityOf(element));
+        jsExecutor = (JavascriptExecutor) driver;
+        jsExecutor.executeScript("arguments[0].scrollIntoView();", element);
     }
 
     protected void clickElement(final By elementPath) {
         try {
             WebElement element = driver.findElement(elementPath);
-            scrollIntoViewIfElementIsNotInViewPort(element);
-            seleniumWait.waitUntil(ExpectedConditions.visibilityOf(element));
+            seleniumWait.waitUntil(ExpectedConditions.elementToBeClickable(element), 2);
             element.click();
-        } catch (Exception e) {
-            seleniumWait.waitUntil(ExpectedConditions.visibilityOfElementLocated(elementPath));
+        } catch (TimeoutException e) {
             WebElement element = driver.findElement(elementPath);
-            scrollIntoViewIfElementIsNotInViewPort(element);
+            scrollIntoView(element);
+            seleniumWait.waitUntil(ExpectedConditions.elementToBeClickable(element), 2);
+            element.click();
+            jsExecutor.executeScript("arguments[0].click()", element);
+        } catch (StaleElementReferenceException | ElementNotInteractableException e) {
+            seleniumWait.waitUntil(ExpectedConditions.elementToBeClickable(elementPath), 2);
+            WebElement element = driver.findElement(elementPath);
             jsExecutor.executeScript("arguments[0].click()", element);
         }
     }
 
     protected void fillField(final By elementPath, String text) {
         WebElement element = driver.findElement(elementPath);
-        scrollIntoViewIfElementIsNotInViewPort(element);
+        scrollIntoView(element);
         seleniumWait.waitUntil(ExpectedConditions.visibilityOf(element));
         element.clear();
         element.sendKeys(text);
