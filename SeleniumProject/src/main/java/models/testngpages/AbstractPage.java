@@ -33,7 +33,7 @@ public abstract class AbstractPage implements PomParams {
     }
 
     private void scrollIntoViewIfElementIsNotInViewPort(final WebElement element) {
-        if (!seleniumWait.checkIfElementIsVisibleInViewPort(element, 1)) {
+        if (!seleniumWait.checkIfElementIsVisibleInViewPort(element, 2)) {
             seleniumWait.waitUntil(ExpectedConditions.visibilityOf(element));
             jsExecutor = (JavascriptExecutor) driver;
             jsExecutor.executeScript("arguments[0].scrollIntoView();", element);
@@ -46,9 +46,10 @@ public abstract class AbstractPage implements PomParams {
             scrollIntoViewIfElementIsNotInViewPort(element);
             seleniumWait.waitUntil(ExpectedConditions.elementToBeClickable(element));
             element.click();
-        } catch (StaleElementReferenceException | ElementNotInteractableException e) {
+        } catch (Exception e) {
             seleniumWait.waitUntil(ExpectedConditions.elementToBeClickable(elementPath));
             WebElement element = driver.findElement(elementPath);
+            scrollIntoViewIfElementIsNotInViewPort(element);
             jsExecutor.executeScript("arguments[0].click()", element);
         }
     }

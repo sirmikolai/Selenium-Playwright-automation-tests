@@ -13,6 +13,9 @@ public interface PomParams {
 
     default boolean isHeadlessModeEnabled() {
         final String isHeadless = System.getProperty("headless");
-        return isHeadless.toLowerCase().equalsIgnoreCase("yes");
+        if (isHeadless != null) {
+            return isHeadless.toLowerCase().equalsIgnoreCase("yes");
+        }
+        return false;
     }
 }
