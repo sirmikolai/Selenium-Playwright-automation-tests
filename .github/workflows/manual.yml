@@ -67,7 +67,7 @@ jobs:
           cache: maven
         if: ${{ env.JAVA_HOME }} == ''
       - name: Initialize App server
-        run: mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=initializeappserversuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
+        run: mvn clean install --file ./SeleniumProject/pom.xml -DsuiteFile=initializeappserversuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
 
   Execute-E2E-tests:
   
@@ -84,7 +84,7 @@ jobs:
           cache: maven
         if: ${{ env.JAVA_HOME }} == ''
       - name: Run all E2E tests
-        run: mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
+        run: mvn clean install --file ./SeleniumProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
   Remove-test-data:
   
     runs-on: ubuntu-latest  
@@ -100,4 +100,4 @@ jobs:
           cache: maven
         if: ${{ env.JAVA_HOME }} == ''
       - name: Remove test data
-        run: mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=removetestdatasuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
+        run: mvn clean install --file ./SeleniumProject/pom.xml -DsuiteFile=removetestdatasuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
