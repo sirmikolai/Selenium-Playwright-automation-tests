@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterClass;
@@ -52,6 +53,7 @@ public abstract class AbstractTest implements PomParams {
         this.driver = getBrowser();
         threadLocalDriver.set(driver);
         this.seleniumWait = new SeleniumWait(driver);
+        maximizeWindow();
         mainPage = openPageWithUrl(BASE_URL, MainPage.class);
         assertThatMainPageIsVisible();
         carBrandsBrowsePage = new CarBrandsBrowsePage(driver);
@@ -77,11 +79,15 @@ public abstract class AbstractTest implements PomParams {
         return threadLocalDriver.get();
     }
 
+    private void maximizeWindow() {
+        driver.manage().window().setSize(new Dimension(1920, 1080));
+        driver.manage().window().maximize();
+    }
+
     protected  <T extends AbstractPage> T openPageWithUrl(String url, Class<T> clazz) {
         logger.info(String.format("Opening page with url: %s", url));
         driver.manage().deleteAllCookies();
         driver.get(url);
-        driver.manage().window().maximize();
         T page = null;
         try {
             page = clazz.getDeclaredConstructor(WebDriver.class).newInstance(driver);
