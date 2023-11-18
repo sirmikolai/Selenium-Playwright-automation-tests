@@ -96,9 +96,11 @@ jobs:
         if: ${{ env.JAVA_HOME }} == ''
       - name: Remove test data
         run: mvn clean install --file ./SeleniumProject/pom.xml -DsuiteFile=removetestdatasuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
-  allure:
+  Generate-allure-report:
+  
     name: Generate Allure Report
     runs-on: ubuntu-latest
+    needs: Remove-test-data
     steps:
       - uses: actions/checkout@v2
 
