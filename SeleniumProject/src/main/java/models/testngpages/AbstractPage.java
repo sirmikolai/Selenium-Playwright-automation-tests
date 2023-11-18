@@ -32,7 +32,7 @@ public abstract class AbstractPage implements PomParams {
         }
     }
 
-    private void scrollIntoView(final WebElement element) {
+    protected void scrollIntoView(final WebElement element) {
         seleniumWait.waitUntil(ExpectedConditions.visibilityOf(element));
         jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript("arguments[0].scrollIntoView();", element);
