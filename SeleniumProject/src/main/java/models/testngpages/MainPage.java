@@ -97,14 +97,14 @@ public class MainPage extends AbstractPage {
     public String getTextFromSuccessAlert() {
         logger.info("Get text from success alert");
         seleniumWait.waitForPageInitialization();
-        scrollIntoView(driver.findElement(By.cssSelector(SUCCESS_ALERT_CSS)));
+        scrollToTheTop();
         return getTextFromElement(By.cssSelector(SUCCESS_ALERT_CSS));
     }
 
     public String getTextFromDangerAlert() {
         logger.info("Get text from danger alert");
         seleniumWait.waitForPageInitialization();
-        scrollIntoView(driver.findElement(By.cssSelector(DANGER_ALERT_CSS)));
+        scrollToTheTop();
         return getTextFromElement(By.cssSelector(DANGER_ALERT_CSS));
     }
 

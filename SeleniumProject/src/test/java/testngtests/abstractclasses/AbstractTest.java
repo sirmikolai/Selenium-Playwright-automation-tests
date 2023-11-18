@@ -160,9 +160,15 @@ public abstract class AbstractTest implements PomParams {
 
     @AfterClass(alwaysRun = true)
     public void quitDriver() {
+        unbind();
         if (driver != null) {
-            driver.quit();
-            unbind();
+            try {
+                driver.quit();
+                threadLocalDriver.remove();
+            } catch (Exception e) {
+                driver.quit();
+                threadLocalDriver.remove();
+            }
         }
     }
 }
