@@ -19,7 +19,13 @@ public class AllureListener implements TestLifecycleListener {
     private static final Log logger = LogFactory.getLog(AllureListener.class);
 
     @Override
+    public void afterTestStart(TestResult result) {
+        logger.info(String.format("=== Test %s started ===", result.getName()));
+    }
+
+    @Override
     public void beforeTestStop(TestResult result) {
+        logger.info(String.format("=== Test %s finished with status %s ===", result.getName(), result.getStatus()));
         WebDriver driver = AbstractTest.getDriverFromThreadLocal();
         if (result.getStatus() != Status.PASSED) {
             if (driver != null) {

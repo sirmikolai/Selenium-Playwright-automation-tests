@@ -33,7 +33,7 @@ public abstract class AbstractPage implements PomParams {
     }
 
     protected void scrollToTheTop() {
-        jsExecutor.executeScript("window.scrollBy(0,-500)", "");
+        jsExecutor.executeScript("window.scrollBy(0,-1000)", "");
     }
 
     private void scrollIntoView(final WebElement element) {

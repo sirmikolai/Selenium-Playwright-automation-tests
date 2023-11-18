@@ -48,6 +48,7 @@ public abstract class AbstractTest implements PomParams {
     private String testClassName;
 
     public void setUp(ITestContext iTestContext) {
+        logger.info("Driver starting");
         this.testClassName = iTestContext.getAllTestMethods()[0].getTestClass().getName().substring(StringUtils.lastIndexOf(iTestContext.getAllTestMethods()[0].getTestClass().getName(), ".") + 1);
         bindLogName(testClassName);
         this.driver = getBrowser();
@@ -160,15 +161,11 @@ public abstract class AbstractTest implements PomParams {
 
     @AfterClass(alwaysRun = true)
     public void quitDriver() {
-        unbind();
+        logger.info("Driver quitting");
         if (driver != null) {
-            try {
-                driver.quit();
-                threadLocalDriver.remove();
-            } catch (Exception e) {
-                driver.quit();
-                threadLocalDriver.remove();
-            }
+            driver.quit();
+            threadLocalDriver.remove();
+            unbind();
         }
     }
 }
