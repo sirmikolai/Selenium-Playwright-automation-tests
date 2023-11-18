@@ -79,31 +79,7 @@ jobs:
         if: ${{ env.JAVA_HOME }} == ''
       - name: Run all E2E tests
         run: mvn clean install --file ./SeleniumProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
-  Remove-test-data:
-
-    name: Remove test data
-    runs-on: ubuntu-latest  
-    needs: Execute-E2E-tests
-    if: always()
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: maven
-        if: ${{ env.JAVA_HOME }} == ''
-      - name: Remove test data
-        run: mvn clean install --file ./SeleniumProject/pom.xml -DsuiteFile=removetestdatasuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
-  Generate-allure-report:
-  
-    name: Generate Allure Report
-    runs-on: ubuntu-latest
-    needs: Remove-test-data
-    if: always()
-    steps:
-      - uses: actions/checkout@v3
+        
       - name: Get Allure history
         uses: actions/checkout@v2
         if: always()
@@ -130,3 +106,21 @@ jobs:
           PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLISH_BRANCH: gh-pages
           PUBLISH_DIR: allure-history
+
+  Remove-test-data:
+
+    name: Remove test data
+    runs-on: ubuntu-latest  
+    needs: Execute-E2E-tests
+    if: always()
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+        if: ${{ env.JAVA_HOME }} == ''
+      - name: Remove test data
+        run: mvn clean install --file ./SeleniumProject/pom.xml -DsuiteFile=removetestdatasuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
