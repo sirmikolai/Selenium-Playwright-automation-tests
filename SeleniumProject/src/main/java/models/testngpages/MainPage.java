@@ -23,8 +23,8 @@ public class MainPage extends AbstractPage {
     private static final String SIGN_OUT_BUTTON_CSS = "a[href='/sign-out']";
     private static final String RESET_PASSWORD_BUTTON_CSS = "a[href='/reset-password-form']";
     private static final String ADMIN_PANEL_BUTTON_CSS = "a[href='/admin-panel']";
-    private static final String SUCCESS_ALERT_CSS = "div[class='alert alert-success']";
-    private static final String DANGER_ALERT_CSS = "div[class='alert alert-danger']";
+    private static final String SUCCESS_ALERT_WITH_TEXT_XPATH = "//div[@class='alert alert-success']//span[contains(text(),\"%s\")]";
+    private static final String DANGER_ALERT_WITH_TEXT_XPATH = "//div[@class='alert alert-danger']//span[contains(text(),\"%s\")]";
     private static final String FORM_WAS_VALIDATED_CSS = "form[class*='was-validated']";
     private static final String ADD_CAR_BRAND_CSS = "a[href='/car-brand/add-form']";
 
@@ -94,18 +94,16 @@ public class MainPage extends AbstractPage {
         return isElementDisplayedOnThePage(By.cssSelector(ADMIN_PANEL_BUTTON_CSS), 1);
     }
 
-    public String getTextFromSuccessAlert() {
-        logger.info("Get text from success alert");
+    public boolean isSuccessAlertVisibleWithExpectedText(final String expectedText) {
+        logger.info("Check if success alert has expected text");
         seleniumWait.waitForPageInitialization();
-        scrollToTheTop();
-        return getTextFromElement(By.cssSelector(SUCCESS_ALERT_CSS));
+        return isElementDisplayedOnThePage(By.xpath(String.format(SUCCESS_ALERT_WITH_TEXT_XPATH, expectedText)), 5);
     }
 
-    public String getTextFromDangerAlert() {
-        logger.info("Get text from danger alert");
+    public boolean isDangerAlertVisibleWithExpectedText(final String expectedText) {
+        logger.info("Check if danger alert has expected text");
         seleniumWait.waitForPageInitialization();
-        scrollToTheTop();
-        return getTextFromElement(By.cssSelector(DANGER_ALERT_CSS));
+        return isElementDisplayedOnThePage(By.xpath(String.format(DANGER_ALERT_WITH_TEXT_XPATH, expectedText)), 5);
     }
 
     public boolean isFormWasValidatedWithSuccess() {

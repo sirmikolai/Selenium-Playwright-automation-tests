@@ -40,7 +40,7 @@ public abstract class AbstractTest implements PomParams {
     private WebDriver driver;
     private static ThreadLocal<WebDriver> threadLocalDriver = new ThreadLocal<>();
     private SeleniumWait seleniumWait;
-    private static final String BASE_URL = "https://car-info-app.onrender.com/";
+    private static final String BASE_URL = "localhost:3000";
     protected MainPage mainPage;
     protected CarBrandsBrowsePage carBrandsBrowsePage;
     protected User existedAdminUser = new User.UserBuilder(UserGroup.ADMIN).build();
@@ -131,15 +131,15 @@ public abstract class AbstractTest implements PomParams {
     }
 
     protected void assertThatSuccessAlertHasExpectedText(String text) {
-        Assertions.assertThat(mainPage.getTextFromSuccessAlert())
+        Assertions.assertThat(mainPage.isSuccessAlertVisibleWithExpectedText(text))
                 .as("Assert that success alert has text: " + text)
-                .isEqualToIgnoringCase(text);
+                .isTrue();
     }
 
     protected void assertThatDangerAlertHasExpectedText(String text) {
-        Assertions.assertThat(mainPage.getTextFromDangerAlert())
+        Assertions.assertThat(mainPage.isDangerAlertVisibleWithExpectedText(text))
                 .as("Assert that danger alert has text: " + text)
-                .isEqualToIgnoringCase(text);
+                .isTrue();
     }
 
     protected void assertThatFormWasValidatedWithSuccess(boolean withSuccess) {

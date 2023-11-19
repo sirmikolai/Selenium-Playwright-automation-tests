@@ -64,7 +64,7 @@ public class CarBrandFormPage extends MainPage {
         logger.info("Submit car brand form");
         clickElement(By.cssSelector(SUBMIT_BUTTON));
         confirmAlertIfItPresent();
-        seleniumWait.waitUntil(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(MainPage.ROOT_CSS)));
+        seleniumWait.waitUntil(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(ROOT_CSS)));
         return new MainPage(driver);
     }
 }

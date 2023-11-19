@@ -32,10 +32,6 @@ public abstract class AbstractPage implements PomParams {
         }
     }
 
-    protected void scrollToTheTop() {
-        jsExecutor.executeScript("window.scrollBy(0,-1000)", "");
-    }
-
     private void scrollIntoView(final WebElement element) {
         seleniumWait.waitUntil(ExpectedConditions.visibilityOf(element));
         jsExecutor = (JavascriptExecutor) driver;
@@ -53,10 +49,12 @@ public abstract class AbstractPage implements PomParams {
             seleniumWait.waitUntil(ExpectedConditions.elementToBeClickable(element), 2);
             element.click();
             jsExecutor.executeScript("arguments[0].click()", element);
+            seleniumWait.waitForPageInitialization();
         } catch (StaleElementReferenceException | ElementNotInteractableException e) {
             seleniumWait.waitUntil(ExpectedConditions.elementToBeClickable(elementPath), 2);
             WebElement element = driver.findElement(elementPath);
             jsExecutor.executeScript("arguments[0].click()", element);
+            seleniumWait.waitForPageInitialization();
         }
     }
 

@@ -1,9 +1,7 @@
 package core.waits;
 
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -50,26 +48,6 @@ public class SeleniumWait {
         final String jsScript = "return document.readyState";
         ExpectedCondition<Boolean> pageInitializationCondition = driver1 -> jsExecutor.executeScript(jsScript).equals("complete");
         new WebDriverWait(driver, Duration.ofSeconds(TIMEOUT)).until(pageInitializationCondition);
-    }
-
-    public boolean checkIfElementIsVisibleInViewPort(final WebElement webElement, int timeoutInSeconds) {
-        ExpectedCondition<Boolean> waitingForElementInViewPort = driver1 -> (Boolean) jsExecutor.executeScript(
-                "var element = arguments[0]; " +
-                        "var rect = element.getBoundingClientRect(); " +
-                        "return ( " +
-                        "rect.top >= 0 && " +
-                        "rect.left >= 0 && " +
-                        "rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && " +
-                        "rect.right <= (window.innerWidth || document.documentElement.clientWidth) " +
-                        ");"
-                , webElement);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
-        try {
-            wait.until(waitingForElementInViewPort);
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
     }
 
     public void waitForExpectedOptionToBeSelected(final Select selectElement, String displayedText, int seconds) {
