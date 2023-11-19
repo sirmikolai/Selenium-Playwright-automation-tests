@@ -40,7 +40,7 @@ public abstract class AbstractTest implements PomParams {
     private WebDriver driver;
     private static ThreadLocal<WebDriver> threadLocalDriver = new ThreadLocal<>();
     private SeleniumWait seleniumWait;
-    private static final String BASE_URL = "localhost:3000";
+    private static final String BASE_URL = "https://car-info-app.onrender.com/";
     protected MainPage mainPage;
     protected CarBrandsBrowsePage carBrandsBrowsePage;
     protected User existedAdminUser = new User.UserBuilder(UserGroup.ADMIN).build();
