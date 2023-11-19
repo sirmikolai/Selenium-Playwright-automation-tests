@@ -19,7 +19,7 @@ public abstract class AbstractPage implements PomParams {
 
     private boolean isAlertPresent() {
         try {
-            seleniumWait.waitInMillis(100);
+            seleniumWait.waitUntil(ExpectedConditions.alertIsPresent(),5);
             driver.switchTo().alert();
             return true;
         } catch (NoAlertPresentException e) {
