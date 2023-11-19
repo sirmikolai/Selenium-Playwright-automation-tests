@@ -2,6 +2,7 @@ package core.webdriver;
 
 import core.PomParams;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
@@ -14,6 +15,7 @@ public class EdgeDriverFactory implements DriverFactory, PomParams {
         options.addArguments("--window-size=1920,1080");
         options.addArguments("start-maximized");
         options.addArguments("--remote-allow-origins=*");
+        options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.ACCEPT);
         if (isHeadlessModeEnabled()) {
             options.addArguments("--headless=new");
         }
