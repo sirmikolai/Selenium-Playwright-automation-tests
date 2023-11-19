@@ -81,6 +81,7 @@ jobs:
         run: mvn clean install --file ./SeleniumProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=${{ inputs.browser }} -Dheadless=yes
         
       - name: Get Allure history
+        uses: actions/checkout@v3
         if: always()
         continue-on-error: true
         with:
