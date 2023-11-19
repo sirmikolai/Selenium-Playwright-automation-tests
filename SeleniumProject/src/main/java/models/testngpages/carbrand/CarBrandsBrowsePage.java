@@ -77,6 +77,7 @@ public class CarBrandsBrowsePage extends MainPage {
     public CarBrandsBrowsePage deleteCarBrandForName(String name) {
         logger.info(String.format("Click 'Delete car brand' button for car brand name: %s", name));
         clickElement(By.xpath(String.format(DELETE_CAR_BRAND_XPATH, name)));
+        confirmAlertIfItPresent();
         seleniumWait.waitForPageInitialization();
         return this;
     }
