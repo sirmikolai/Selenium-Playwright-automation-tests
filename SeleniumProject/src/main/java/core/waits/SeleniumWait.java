@@ -45,6 +45,7 @@ public class SeleniumWait {
     }
 
     public void waitForPageInitialization() {
+        waitInMillis(100);
         final String jsScript = "return document.readyState";
         ExpectedCondition<Boolean> pageInitializationCondition = driver1 -> jsExecutor.executeScript(jsScript).equals("complete");
         new WebDriverWait(driver, Duration.ofSeconds(TIMEOUT)).until(pageInitializationCondition);
