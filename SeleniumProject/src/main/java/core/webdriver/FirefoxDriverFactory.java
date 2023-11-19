@@ -2,6 +2,7 @@ package core.webdriver;
 
 import core.PomParams;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -14,6 +15,7 @@ public class FirefoxDriverFactory implements DriverFactory, PomParams {
         FirefoxOptions options = new FirefoxOptions();
         options.addPreference("intl.accept_languages", "en-US");
         options.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
+        options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.ACCEPT);
         if (isHeadlessModeEnabled()) {
             options.addArguments("--headless");
         }
