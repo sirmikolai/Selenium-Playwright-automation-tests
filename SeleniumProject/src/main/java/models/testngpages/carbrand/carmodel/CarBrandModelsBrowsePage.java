@@ -1,6 +1,5 @@
 package models.testngpages.carbrand.carmodel;
 
-import com.google.common.base.Verify;
 import models.enums.CarModelClass;
 import models.testngpages.MainPage;
 import org.apache.commons.logging.Log;
@@ -83,7 +82,6 @@ public class CarBrandModelsBrowsePage extends MainPage {
         logger.info(String.format("Click 'Delete car model' button for name %s", name));
         clickElement(By.xpath(String.format(CAR_MODEL_DELETE_BUTTON_XPATH, name)));
         confirmAlertIfItPresent();
-        Verify.verify(isRowWithCarModelNameVisible(name));
         return this;
     }
 

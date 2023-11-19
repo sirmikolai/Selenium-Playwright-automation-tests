@@ -4,7 +4,6 @@ import models.testngpages.MainPage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -65,13 +64,7 @@ public class CarBrandFormPage extends MainPage {
         logger.info("Submit car brand form");
         clickElement(By.cssSelector(SUBMIT_BUTTON));
         confirmAlertIfItPresent();
-        try {
-            seleniumWait.waitUntil(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(ROOT_CSS)));
-        } catch (TimeoutException e) {
-            clickElement(By.cssSelector(SUBMIT_BUTTON));
-            confirmAlertIfItPresent();
-            seleniumWait.waitUntil(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(ROOT_CSS)));
-        }
+        seleniumWait.waitUntil(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(ROOT_CSS)));
         return new MainPage(driver);
     }
 }
