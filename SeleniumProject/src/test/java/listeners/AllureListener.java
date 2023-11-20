@@ -4,7 +4,6 @@ import io.qameta.allure.Allure;
 import io.qameta.allure.listener.TestLifecycleListener;
 import io.qameta.allure.model.Status;
 import io.qameta.allure.model.TestResult;
-import models.testngpages.MainPage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.OutputType;
@@ -30,7 +29,6 @@ public class AllureListener implements TestLifecycleListener {
         if (result.getStatus() != Status.PASSED) {
             if (driver != null) {
                 Allure.addAttachment(result.getName(), new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
-                logger.info(((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64));
             }
         }
     }

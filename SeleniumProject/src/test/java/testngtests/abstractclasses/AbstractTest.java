@@ -40,7 +40,7 @@ public abstract class AbstractTest implements PomParams {
     private WebDriver driver;
     private static ThreadLocal<WebDriver> threadLocalDriver = new ThreadLocal<>();
     private SeleniumWait seleniumWait;
-    private static final String BASE_URL = "https://car-info-app.onrender.com/";
+    private final String baseUrl = getBaseUrl();
     protected MainPage mainPage;
     protected CarBrandsBrowsePage carBrandsBrowsePage;
     protected User existedAdminUser = new User.UserBuilder(UserGroup.ADMIN).build();
@@ -55,7 +55,7 @@ public abstract class AbstractTest implements PomParams {
         threadLocalDriver.set(driver);
         this.seleniumWait = new SeleniumWait(driver);
         maximizeWindow();
-        mainPage = openPageWithUrl(BASE_URL, MainPage.class);
+        mainPage = openPageWithUrl(baseUrl, MainPage.class);
         assertThatMainPageIsVisible();
         carBrandsBrowsePage = new CarBrandsBrowsePage(driver);
     }

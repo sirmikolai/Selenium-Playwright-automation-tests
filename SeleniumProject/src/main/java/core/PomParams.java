@@ -6,6 +6,10 @@ import java.util.Arrays;
 
 public interface PomParams {
 
+    default String getBaseUrl() {
+        return System.getProperty("baseUrl");
+    }
+
     default BrowserType getBrowserType() {
         final String browserValue = System.getProperty("browser").toUpperCase();
         return Arrays.stream(BrowserType.values()).filter(b -> b.toString().equalsIgnoreCase(browserValue)).findFirst().orElse(BrowserType.CHROME);
