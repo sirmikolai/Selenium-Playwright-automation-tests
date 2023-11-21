@@ -1,5 +1,11 @@
 # Selenium-Playwright-automation-tests
 
+## Język/Language:
+[Polski](#polski)
+[English](#english)
+
+# Polski
+
 ## Spis treści:
 [Opis](#opis)
 [Scenariusze-testowe](#scenariusze-testowe)
@@ -147,7 +153,7 @@ Podczas implementacji testów automatycznych został użyty wzorzec Page Object 
 </table>
 
 ## Zmiana hasła użytkownika
-### Klasa testowa: `ResetPasswordTest`
+### Klasa testowa: `ChangingPasswordTest`
 
 <table><tr><th colspan="2" valign="top"><p><b>SCENARIUSZ TESTOWY #3</b></p><p><b>Zmiana hasła użytkownika.</b></p></th></tr>
 <tr><td colspan="1" valign="top"><b>Typ:</b></td><td colspan="1" valign="top">Test funkcjonalny.</td></tr>
@@ -318,3 +324,319 @@ Pipeline posiada dwa parametry:
 Kod źródłowy pipeline jest umieszczony tutaj [LINK](https://github.com/sirmikolai/Selenium-Playwright-automation-tests/blob/main/.github/workflows/manual.yml)
 
 Po wykonaniu testów, generowany jest raport przy użyciu biblioteki Allure-testng i jest udostępniany na stronie [LINK](https://sirmikolai.github.io/Selenium-Playwright-automation-tests/)
+
+# English
+
+## Table of Contents:
+[Description](#description)
+[Test Scenarios](#test-scenarios)
+[Requirements](#requirements)
+[Running Tests](#running-tests)
+[CI/CD Integration](#cicd-integration)
+
+## Description
+
+Selenium-Playwright-automation-tests is a repository containing end-to-end (E2E) automated tests prepared for two different frameworks: Selenium and Playwright. The repository served me for conducting necessary research in my master's thesis titled "The comparative analysis of selected frameworks for automatic testing of web applications using Java programming language".
+
+The automated tests verify my custom web application Car-info-app, which is accessible at LINK (sometimes you may need to wait a moment after entering the site for the server to start, usually taking about a minute).
+
+Test automation for the Selenium framework uses the following libraries:
+```
+- Selenium v.4.15.0,
+- TestNG v.7.8.0,
+- Allure-testng v.2.24.0,
+- Logback 1.4.11.
+```
+
+Test automation for the Playwright framework uses the following libraries:
+```
+- Playwright v.1.39.0,
+- TestNG v.7.8.0,
+- Allure-testng v.2.24.0,
+- Logback 1.4.11.
+```
+
+The Page Object Model pattern was used during the implementation of automated tests.
+
+# Test Scenarios:
+
+## User Registration
+### Test Class: `RegistrationTest`
+
+<table><tr><th colspan="2" valign="top"><p><b>TEST SCENARIO #1</b></p><p><b>User Registration.</b></p></th></tr>
+<tr><td colspan="1" valign="top"><b>Type:</b></td><td colspan="1" valign="top">Functional Test.</td></tr>
+<tr><td colspan="1" valign="top"><b>Purpose:</b></td><td colspan="1" valign="top">Verify the user registration functionality in the system.</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #1</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User successfully registers for the application.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>No user is logged in.</p><p>No user with the given email address exists.</p></td></tr>
+<tr><td colspan="1" rowspan="9" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Sign up" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Enter the email address in the "Email" field.</td></tr>
+<tr><td colspan="1" valign="top">4. Enter the password in the "Password" field.</td></tr>
+<tr><td colspan="1" valign="top">5. Enter the password in the "Confirm password" field.</td></tr>
+<tr><td colspan="1" valign="top">6. Check the "Agree to terms and conditions" checkbox.</td></tr>
+<tr><td colspan="1" valign="top">7. Click the "Sign up" button.</td></tr>
+<tr><td colspan="1" valign="top">8. Go to the mailbox with the provided registration email address.</td></tr>
+<tr><td colspan="1" valign="top">9. Open the email with the subject "Please confirm your account" and click the "Click here" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>User has been successfully registered.</p><p>In the web application, a message appears: "Success! Your account has been activated! Now, you can sign in."</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #2</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User tries to register with an email address that already exists in the system.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>No user is logged in.</p><p>Have the email address of a registered user.</p></td></tr>
+<tr><td colspan="1" rowspan="7" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Sign up" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Enter the email address in the "Email" field.</td></tr>
+<tr><td colspan="1" valign="top">4. Enter the password in the "Password" field.</td></tr>
+<tr><td colspan="1" valign="top">5. Enter the password in the "Confirm password" field.</td></tr>
+<tr><td colspan="1" valign="top">6. Check the "Agree to terms and conditions" checkbox.</td></tr>
+<tr><td colspan="1" valign="top">7. Click the "Sign up" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>User is not registered.</p><p>An error message appears: "Error! There is already a registered user with that email!"</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #3</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User tries to register with different passwords.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>No user is logged in.</p><p>No user exists with the provided email address.</p></td></tr>
+<tr><td colspan="1" rowspan="7" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Sign up" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Enter the email address in the "Email" field.</td></tr>
+<tr><td colspan="1" valign="top">4. Enter the password in the "Password" field.</td></tr>
+<tr><td colspan="1" valign="top">5. Enter a different password in the "Confirm password" field.</td></tr>
+<tr><td colspan="1" valign="top">8. Check the "Agree to terms and conditions" checkbox.</td></tr>
+<tr><td colspan="1" valign="top">9. Click the "Sign up" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>User is not registered.</p><p>The "Confirm password" field is highlighted in red.</p><p>Below that field, there is a message: "Please provide password confirmation."</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #4</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User tries to register without checking the "Agree to terms and conditions" checkbox.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>No user is logged in.</p><p>No user exists with the provided email address.</p></td></tr>
+<tr><td colspan="1" rowspan="7" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Sign up" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Enter the email address in the "Email" field.</td></tr>
+<tr><td colspan="1" valign="top">4. Enter the password in the "Password" field.</td></tr>
+<tr><td colspan="1" valign="top">5. Enter the password in the "Confirm password" field.</td></tr>
+<tr><td colspan="1" valign="top">6. Uncheck the "Agree to terms and conditions" checkbox.</td></tr>
+<tr><td colspan="1" valign="top">7. Click the "Sign up" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>User is not registered.</p><p>The "Agree to terms and conditions" checkbox is highlighted in red.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
+</table>
+
+## User Login
+### Test Class: `LoginTest`
+
+<table><tr><th colspan="2" valign="top"><p><b>TEST SCENARIO #2</b></p><p><b>User Login.</b></p></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User login scenarios.</td></tr>
+<tr><td colspan="1" valign="top"><b>Type:</b></td><td colspan="1" valign="top">Functional test.</td></tr>
+<tr><td colspan="1" valign="top"><b>Purpose:</b></td><td colspan="1" valign="top">Check the functionality of user login to the system.</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #1</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User successfully logs in to the application.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>No user is logged in.</p><p>User has an account in the application.</p></td></tr>
+<tr><td colspan="1" rowspan="5" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Sign in" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Enter the email address in the "Email" field.</td></tr>
+<tr><td colspan="1" valign="top">4. Enter the password in the "Password" field.</td></tr>
+<tr><td colspan="1" valign="top">5. Click the "Sign in" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>User is logged in.</p><p>The "Log out" button appears.</p><p>The message "Success! You have been signed in correctly." appears.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">User logout.</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #2</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User attempts to log in with a non-existent email address.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top">No user is logged in.</td></tr>
+<tr><td colspan="1" rowspan="5" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Sign in" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Enter an incorrect email address in the "Email" field.</td></tr>
+<tr><td colspan="1" valign="top">4. Enter the password in the "Password" field.</td></tr>
+<tr><td colspan="1" valign="top">5. Click the "Sign in" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>User is not logged in.</p><p>The message "Error! Invalid credentials." appears.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #3</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User attempts to log in with an incorrect user password.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>No user is logged in.</p><p>User has an account in the application.</p></td></tr>
+<tr><td colspan="1" rowspan="5" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Sign in" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Enter the email address in the "Email" field.</td></tr>
+<tr><td colspan="1" valign="top">4. Enter an incorrect password in the "Password" field.</td></tr>
+<tr><td colspan="1" valign="top">5. Click the "Sign in" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>User is not logged in.</p><p>The message "Error! Invalid credentials." appears.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #4</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User attempts to log in without providing any data.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top">No user is logged in.</td></tr>
+<tr><td colspan="1" rowspan="3" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Sign in" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Click the "Sign in" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>The "Email" and "Password" fields are highlighted in red.</p><p>Below the "Email" field, the message "Please provide your email address." appears.</p><p>Below the "Password" field, the message "Please provide password." appears.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
+</table>
+
+## Changing password
+### Test Class: `ChangingPasswordTest`
+
+<table><tr><th colspan="2" valign="top"><b>TEST SCENARIO #3</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User password change scenarios.</td></tr>
+<tr><td colspan="1" valign="top"><b>Type:</b></td><td colspan="1" valign="top">Functional test.</td></tr>
+<tr><td colspan="1" valign="top"><b>Purpose:</b></td><td colspan="1" valign="top">Check the functionality of user password change.</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #1</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User successfully performs actions to change the password of their account.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top">User is logged into the system.</td></tr>
+<tr><td colspan="1" rowspan="6" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Change password" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Enter the current user password in the "Current password" field.</td></tr>
+<tr><td colspan="1" valign="top">4. Enter the new password in the "New password" field.</td></tr>
+<tr><td colspan="1" valign="top">5. Enter the new password again in the "Confirm new password" field.</td></tr>
+<tr><td colspan="1" valign="top">6. Click the "Confirm" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>Password has been changed.</p><p>The message "Success! Your password has been changed." appears.</p><p>User can log into the system with the new password.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #2</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User changes the password of their account, providing incorrect data in the "Confirm new password" field.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top">User is logged into the system.</td></tr>
+<tr><td colspan="1" rowspan="6" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Change password" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Enter the current user password in the "Current password" field.</td></tr>
+<tr><td colspan="1" valign="top">4. Enter the new password in the "New password" field.</td></tr>
+<tr><td colspan="1" valign="top">5. Enter a different password in the "Confirm new password" field.</td></tr>
+<tr><td colspan="1" valign="top">6. Click the "Confirm" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>Password is not changed.</p><p>The "Confirm new password" field is highlighted in red.</p><p>Below the "Confirm new password" field, the message "Please provide password confirmation." appears.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #3</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User changes the password of their account, providing incorrect data in the "Current password" field.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top">User is logged into the system.</td></tr>
+<tr><td colspan="1" rowspan="6" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Change password" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Enter an incorrect current user password in the "Current password" field.</td></tr>
+<tr><td colspan="1" valign="top">4. Enter the new password in the "New password" field.</td></tr>
+<tr><td colspan="1" valign="top">5. Enter the new password again in the "Confirm new password" field.</td></tr>
+<tr><td colspan="1" valign="top">6. Click the "Confirm" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>Password is not changed.</p><p>The message "Error! Incorrect current password!" appears.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
+</table>
+
+## User management
+### Test Class: `AdminPanelTest`
+
+<table>
+ <tr><th colspan="2" valign="top"><b>TEST CASE #4</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User management through the administrator panel.</td></tr>
+<tr><td colspan="1" valign="top"><b>Type:</b></td><td colspan="1" valign="top">Functional test.</td></tr>
+<tr><td colspan="1" valign="top"><b>Purpose:</b></td><td colspan="1" valign="top">Check the functionality of user management through the administrator panel.</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #1</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">Administrator changes the role of a new user from USER to ADMIN.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>User with ADMIN or SUPERADMIN role is logged into the system.</p><p>There is a user with USER role.</p></td></tr>
+<tr><td colspan="1" rowspan="3" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Admin panel" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Click the "Promote to Admin role" button next to the row with the email address of the user with USER role.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>The user's role has been changed.</p><p>The message "Success! User with email {{userEmailAddress}} has been promoted to ADMIN role." appears.</p><p>The user whose role has been changed can access the administrator panel after logging in.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #2</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">Administrator changes the role of a new user from ADMIN to USER.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>User with ADMIN or SUPERADMIN role is logged into the system.</p><p>There is another user with ADMIN role.</p></td></tr>
+<tr><td colspan="1" rowspan="3" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Admin panel" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Click the "Demote to User role" button next to the row with the email address of the user with ADMIN role.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>The user's role has been changed.</p><p>The message "Success! User with email {{userEmailAddress}} has been demoted to USER role." appears.</p><p>The user whose role has been changed cannot access the administrator panel after logging in.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #3</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">Administrator deletes a user from the system.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>User with ADMIN or SUPERADMIN role is logged into the system.</p><p>There is a user with USER role.</p></td></tr>
+<tr><td colspan="1" rowspan="3" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Admin panel" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Click the "Delete user" button next to the row with the email address of the user with USER role.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected result:</b></td><td colspan="1" valign="top"><p>The message "Success! User has been removed." appears.</p><p>The user who has been removed cannot log in to the system.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
+</table>
+
+## Adding, editing, deleting Car Brands
+### Test Class: `CarBrandTest`
+
+<table><tr><th colspan="2" valign="top"><p><b>TEST SCENARIO #5</b></p><p><b>Adding, editing, deleting Car Brands.</b></p></th></tr>
+<tr><td colspan="1" valign="top"><b>Type:</b></td><td colspan="1" valign="top">Functional Test.</td></tr>
+<tr><td colspan="1" valign="top"><b>Purpose:</b></td><td colspan="1" valign="top">Checking the functionality of adding, editing, and deleting car brands.</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #1</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User adds a car brand to the system.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top">User is logged into the system.</td></tr>
+<tr><td colspan="1" rowspan="4" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Add car brand" button.</td></tr>
+<tr><td colspan="1" valign="top">3. Fill in the fields in the form using test data.</td></tr>
+<tr><td colspan="1" valign="top">4. Click the "Add car brand" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected Result:</b></td><td colspan="1" valign="top"><p>A new car brand has been added.</p><p>The message "Success! Car brand has been added." appears.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final Actions:</b></td><td colspan="1" valign="top">None</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #2</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User edits an added car brand in the system.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>User is logged into the system.</p><p>A car brand exists.</p></td></tr>
+<tr><td colspan="1" rowspan="4" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Edit car brand" button next to the existing car brand.</td></tr>
+<tr><td colspan="1" valign="top">3. Fill in the fields in the form using different test data.</td></tr>
+<tr><td colspan="1" valign="top">4. Click the "Save changes" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected Result:</b></td><td colspan="1" valign="top"><p>Data of the existing car brand has been modified according to the data provided in the form.</p><p>The message "Success! Car brand has been updated." appears.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final Actions:</b></td><td colspan="1" valign="top">None</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #3</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User deletes an added car brand in the system.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>User is logged into the system.</p><p>A car brand exists.</p></td></tr>
+<tr><td colspan="1" rowspan="3" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "Delete car brand" button next to the existing car brand.</td></tr>
+<tr><td colspan="1" valign="top">3. Confirm the alert.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected Result:</b></td><td colspan="1" valign="top"><p>The car brand has been removed and is not visible on the list.</p><p>The message "Success! Car brand has been removed." appears.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final Actions:</b></td><td colspan="1" valign="top">None</td></tr>
+</table>
+
+## Adding, editing, deleting Car Models
+### Test Class: `CarModelTest`
+
+<table><tr><th colspan="2" valign="top"><p><b>TEST SCENARIO #6</b></p><p><b>Adding, editing, deleting Car Models.</b></p></th></tr>
+<tr><td colspan="1" valign="top"><b>Type:</b></td><td colspan="1" valign="top">Functional Test.</td></tr>
+<tr><td colspan="1" valign="top"><b>Purpose:</b></td><td colspan="1" valign="top">Checking the functionality of adding, editing, and deleting car models.</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #1</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User adds a car model to the system.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>User is logged into the system.</p><p>A car brand exists.</p></td></tr>
+<tr><td colspan="1" rowspan="5" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "View car models" button next to an existing brand.</td></tr>
+<tr><td colspan="1" valign="top">3. Click the "Add car model" button.</td></tr>
+<tr><td colspan="1" valign="top">4. Fill in the fields in the form using test data.</td></tr>
+<tr><td colspan="1" valign="top">5. Click the "Add car model" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected Result:</b></td><td colspan="1" valign="top"><p>A new car model has been added.</p><p>The message "Success! Car model has been added." appears.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final Actions:</b></td><td colspan="1" valign="top">None</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #2</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User edits an added car model in the system.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>User is logged into the system.</p><p>A car brand exists.</p><p>A car model of the brand exists.</p></td></tr>
+<tr><td colspan="1" rowspan="5" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "View car models" button next to an existing brand.</td></tr>
+<tr><td colspan="1" valign="top">3. Click the "Edit car model" button next to an existing car model.</td></tr>
+<tr><td colspan="1" valign="top">4. Fill in the fields in the form using different test data.</td></tr>
+<tr><td colspan="1" valign="top">5. Click the "Save changes" button.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected Result:</b></td><td colspan="1" valign="top"><p>Data of the existing car model has been modified according to the data provided in the form.</p><p>The message "Success! Car model has been updated." appears.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final Actions:</b></td><td colspan="1" valign="top">None</td></tr>
+<tr><th colspan="2" valign="top"><b>TEST CASE #3</b></th></tr>
+<tr><td colspan="1" valign="top"><b>Description:</b></td><td colspan="1" valign="top">User deletes an added car model in the system.</td></tr>
+<tr><td colspan="1" valign="top"><b>Preconditions:</b></td><td colspan="1" valign="top"><p>User is logged into the system.</p><p>A car brand exists.</p><p>A car model of the brand exists.</p></td></tr>
+<tr><td colspan="1" rowspan="4" valign="top"><b>Steps:</b></td><td colspan="1" valign="top">1. Open the web application.</td></tr>
+<tr><td colspan="1" valign="top">2. Click the "View car models" button next to an existing brand.</td></tr>
+<tr><td colspan="1" valign="top">3. Click the "Delete car model" button next to an existing car model.</td></tr>
+<tr><td colspan="1" valign="top">4. Confirm the alert.</td></tr>
+<tr><td colspan="1" valign="top"><b>Expected Result:</b></td><td colspan="1" valign="top"><p>The car model has been removed and is not visible on the list.</p><p>The message "Success! Car model has been removed." appears.</p></td></tr>
+<tr><td colspan="1" valign="top"><b>Final Actions:</b></td><td colspan="1" valign="top">None</td></tr>
+</table>
+
+# Requirements:
+JDK17, maven.
+ 
+# How to run tests:
+
+To build the project, use the following commands:
+```
+mvn clean install -DskipTests --file ./SeleniumProject/pom.xml
+mvn clean install -DskipTests --file ./PlaywrightProject/pom.xml
+```
+ 
+To run all automated tests, use the following command:
+```
+mvn test --file ./SeleniumProject/pom.xml
+mvn test --file ./PlaywrightProject/pom.xml
+```
+
+# CI/CD Integration:
+
+For the presented projects, a pipeline has been prepared using GitHub Actions, which is triggered manually.
+
+The pipeline has two parameters:
+- Framework (selects the project on which automated tests should be run),
+- Browser (selects the browser on which automated tests should be run).
+
+The source code of the pipeline is located here [LINK](https://github.com/sirmikolai/Selenium-Playwright-automation-tests/blob/main/.github/workflows/manual.yml)
+
+After the tests are executed, a report is generated using the Allure-testng library and is available on the following page [LINK](https://sirmikolai.github.io/Selenium-Playwright-automation-tests/)
