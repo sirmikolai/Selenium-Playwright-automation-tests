@@ -7,12 +7,12 @@ Selenium-Playwright-automation-tests jest to repozytorium z testami automatyczny
 Zautomatyzowane testy sprawdzają moją autorską aplikacji internetową [Car-info-app](https://github.com/sirmikolai/Car-info-app), która jest dostępna pod adresem [LINK](https://car-info-app.onrender.com/) (czasami trzeba chwilę poczekać po wejściu na stronę zanim serwer się uruchomi, zwykle trwa to około minuty).
 
 Testy automatyczne sprawdzają takie funkcjonalności jaK:
-- funkcjonalność rejestracji użytkownika do systemu - [Opis scenariusza](#Rejestracja-użytkownika`),
-- funkcjonalność logowania użytkownika do systemu - [Opis scenariusza](#Logowanie-użytkownika`),
-- funkcjonalność zmiany hasła użytkownika - [Opis scenariusza](#Zmiana-hasła-użytkownika`),
-- funkcjonalność zarządzania użytkownikami za pomocą panelu administratora - [Opis scenariusza](#Zarządzanie-użytkownikami`),
-- funkcjonalność dodawania, edycji oraz usuwania marek samochodów - [Opis scenariusza](#Dodawanie-edycja-usuwanie-marek-samochodów`),
-- funkcjonalnośc dodawania, edycji oraz usuwania modeli samochodów - [Opis scenariusza](#Dodawanie-edycja-usuwanie-modeli-samochodów`).
+- funkcjonalność rejestracji użytkownika do systemu - [Opis scenariusza](#rejestracja-użytkownika),
+- funkcjonalność logowania użytkownika do systemu - [Opis scenariusza](#logowanie-użytkownika),
+- funkcjonalność zmiany hasła użytkownika - [Opis scenariusza](#zmiana-hasła-użytkownika),
+- funkcjonalność zarządzania użytkownikami za pomocą panelu administratora - [Opis scenariusza](#zarządzanie-użytkownikami),
+- funkcjonalność dodawania, edycji oraz usuwania marek samochodów - [Opis scenariusza](#dodawanie-edycja-usuwanie-marek-samochodów),
+- funkcjonalnośc dodawania, edycji oraz usuwania modeli samochodów - [Opis scenariusza](#dodawanie-edycja-usuwanie-modeli-samochodów).
 
  
 Testy automatyczne dla frameworka Selenium korzystają m.in. z poniższych bibliotek:
