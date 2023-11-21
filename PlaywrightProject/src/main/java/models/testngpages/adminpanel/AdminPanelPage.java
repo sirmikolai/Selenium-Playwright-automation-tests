@@ -1,12 +1,17 @@
-package models.testngpages;
+package models.testngpages.adminpanel;
 
 import com.microsoft.playwright.Page;
+import models.testngpages.MainPage;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.List;
 
 import static core.mailosaur.MailosaurServerManager.SERVER_ID;
 
 public class AdminPanelPage extends MainPage {
+
+    private static final Log logger = LogFactory.getLog(AdminPanelPage.class);
 
     public static final String ROOT_XPATH = "//h1[text()='USERS']";
     private static final String USER_ROW_XPATH = "//tr[td[1][contains(text(),'%s')]]";
@@ -21,47 +26,41 @@ public class AdminPanelPage extends MainPage {
     }
 
     public AdminPanelPage promoteUserByEmail(String emailAddress) {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.locator(String.format(PROMOTE_TO_ADMIN_ROLE_BY_EMAIL_XPATH, emailAddress)).scrollIntoViewIfNeeded();
-        playwrightPage.click(String.format(PROMOTE_TO_ADMIN_ROLE_BY_EMAIL_XPATH, emailAddress));
-        playwrightWait.waitForPageLoad();
+        logger.info("Click 'Promote to Admin role' button");
+        clickElement(String.format(PROMOTE_TO_ADMIN_ROLE_BY_EMAIL_XPATH, emailAddress));
         return this;
     }
 
     public AdminPanelPage demoteUserByEmail(String emailAddress) {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.locator(String.format(DEMOTE_TO_USER_ROLE_BY_EMAIL_XPATH, emailAddress)).scrollIntoViewIfNeeded();
-        playwrightPage.click(String.format(DEMOTE_TO_USER_ROLE_BY_EMAIL_XPATH, emailAddress));
-        playwrightWait.waitForPageLoad();
+        logger.info("Click 'Demote to User role' button");
+        clickElement(String.format(DEMOTE_TO_USER_ROLE_BY_EMAIL_XPATH, emailAddress));
         return this;
     }
 
     public AdminPanelPage deleteUserByEmail(String emailAddress) {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.locator(String.format(DELETE_USER_BY_EMAIL_XPATH, emailAddress)).scrollIntoViewIfNeeded();
-        playwrightPage.click(String.format(DELETE_USER_BY_EMAIL_XPATH, emailAddress));
-        playwrightWait.waitForPageLoad();
+        logger.info("Click 'Delete user' button");
+        clickElement(String.format(DELETE_USER_BY_EMAIL_XPATH, emailAddress));
         return this;
     }
 
     public boolean isPromoteButtonAvailableForUserWithEmail(String emailAddress) {
-        playwrightWait.waitForPageLoad();
-        return !playwrightPage.isVisible(String.format(PROMOTE_TO_ADMIN_ROLE_BY_EMAIL_XPATH + DISABLED_CLASS_XPATH, emailAddress));
+        logger.info("Check is promote button is available for expected user");
+        return !isElementDisplayedOnThePage(String.format(PROMOTE_TO_ADMIN_ROLE_BY_EMAIL_XPATH + DISABLED_CLASS_XPATH, emailAddress), 1);
     }
 
     public boolean isDemoteButtonAvailableForUserWithEmail(String emailAddress) {
-        playwrightWait.waitForPageLoad();
-        return !playwrightPage.isVisible(String.format(DEMOTE_TO_USER_ROLE_BY_EMAIL_XPATH + DISABLED_CLASS_XPATH, emailAddress));
+        logger.info("Check is demote button is available for expected user");
+        return !isElementDisplayedOnThePage(String.format(DEMOTE_TO_USER_ROLE_BY_EMAIL_XPATH + DISABLED_CLASS_XPATH, emailAddress), 1);
     }
 
     public boolean isDeleteButtonAvailableForUserWithEmail(String emailAddress) {
-        playwrightWait.waitForPageLoad();
-        return !playwrightPage.isVisible(String.format(DELETE_USER_BY_EMAIL_XPATH + DISABLED_CLASS_XPATH, emailAddress));
+        logger.info("Check is delete button is available for expected user");
+        return !isElementDisplayedOnThePage(String.format(DELETE_USER_BY_EMAIL_XPATH + DISABLED_CLASS_XPATH, emailAddress), 1);
     }
 
     public boolean isRowForUserWithEmailExist(String emailAddress) {
-        playwrightWait.waitForPageLoad();
-        return playwrightPage.isVisible(String.format(USER_ROW_XPATH, emailAddress));
+        logger.info("Check is row for expected user exist");
+        return isElementDisplayedOnThePage(String.format(USER_ROW_XPATH, emailAddress), 1);
     }
 
     public List<String> getUsersEmailsToDelete() {

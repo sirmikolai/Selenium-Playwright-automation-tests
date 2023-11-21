@@ -1,8 +1,13 @@
-package models.testngpages;
+package models.testngpages.resetpassword;
 
 import com.microsoft.playwright.Page;
+import models.testngpages.MainPage;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class ResetPasswordFormPage extends MainPage {
+
+    private static final Log logger = LogFactory.getLog(ResetPasswordFormPage.class);
 
     public static final String ROOT_CSS = "form[action*='/reset-password']";
     private static final String CURRENT_PASSWORD_INPUT_CSS = ROOT_CSS + " input[name='current_password']";
@@ -15,29 +20,26 @@ public class ResetPasswordFormPage extends MainPage {
     }
 
     public ResetPasswordFormPage inputCurrentPassword(String currentPassword) {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.fill(CURRENT_PASSWORD_INPUT_CSS, "");
-        playwrightPage.fill(CURRENT_PASSWORD_INPUT_CSS, currentPassword);
+        logger.info("Input current password");
+        fillField(CURRENT_PASSWORD_INPUT_CSS, currentPassword);
         return this;
     }
 
     public ResetPasswordFormPage inputNewPassword(String newPassword) {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.fill(NEW_PASSWORD_INPUT_CSS, "");
-        playwrightPage.fill(NEW_PASSWORD_INPUT_CSS, newPassword);
+        logger.info("Input new password");
+        fillField(NEW_PASSWORD_INPUT_CSS, newPassword);
         return this;
     }
 
     public ResetPasswordFormPage inputNewPasswordConfirmation(String newPasswordConfirmation) {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.fill(NEW_PASSWORD_CONFIRMATION_CSS, "");
-        playwrightPage.fill(NEW_PASSWORD_CONFIRMATION_CSS, newPasswordConfirmation);
+        logger.info("Input new password confirmation");
+        fillField(NEW_PASSWORD_CONFIRMATION_CSS, newPasswordConfirmation);
         return this;
     }
 
     public MainPage clickConfirm() {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.click(CONFIRM_BUTTON_CSS);
+        logger.info("Click 'Confirm' button");
+        clickElement(CONFIRM_BUTTON_CSS);
         return new MainPage(playwrightPage);
     }
 }

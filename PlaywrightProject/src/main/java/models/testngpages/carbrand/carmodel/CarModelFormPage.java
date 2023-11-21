@@ -1,10 +1,16 @@
-package models.testngpages;
+package models.testngpages.carbrand.carmodel;
 
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.SelectOption;
-import models.CarModelClass;
+import com.microsoft.playwright.options.WaitForSelectorState;
+import models.enums.CarModelClass;
+import models.testngpages.MainPage;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class CarModelFormPage extends MainPage {
+
+    private static final Log logger = LogFactory.getLog(CarModelFormPage.class);
 
     public static final String ROOT_CSS = "form[action*='/car-models']";
     private static final String NAME_INPUT_CSS = ROOT_CSS + " input[name='name']";
@@ -17,28 +23,28 @@ public class CarModelFormPage extends MainPage {
     }
 
     public CarModelFormPage inputName(String name) {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.fill(NAME_INPUT_CSS, "");
-        playwrightPage.fill(NAME_INPUT_CSS, name);
+        logger.info(String.format("Input car model name: %s", name));
+        fillField(NAME_INPUT_CSS, name);
         return this;
     }
 
     public CarModelFormPage selectClass(CarModelClass carModelClass) {
+        logger.info(String.format("Input car model class: %s", carModelClass.getDisplayedText()));
         playwrightWait.waitForPageLoad();
         playwrightPage.selectOption(CLASS_SELECT_CSS, new SelectOption().setValue(carModelClass.getDisplayedText()));
         return this;
     }
 
     public CarModelFormPage inputNumberOfGenerations(int numberOfGenerations) {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.fill(NUMBER_OF_GENERATIONS_INPUT, "");
-        playwrightPage.fill(NUMBER_OF_GENERATIONS_INPUT, String.valueOf(numberOfGenerations));
+        logger.info(String.format("Input car model number of generations: %d", numberOfGenerations));
+        fillField(NUMBER_OF_GENERATIONS_INPUT, String.valueOf(numberOfGenerations));
         return this;
     }
 
     public MainPage submit() {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.click(SUBMIT_BUTTON);
+        logger.info("Submit car model form");
+        clickElement(SUBMIT_BUTTON);
+        playwrightWait.waitUntil(ROOT_CSS, WaitForSelectorState.HIDDEN);
         return new MainPage(playwrightPage);
     }
 }

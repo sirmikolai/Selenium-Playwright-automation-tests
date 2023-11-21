@@ -1,20 +1,27 @@
 package testngtests.abstractclasses;
 
 import com.mailosaur.MailosaurException;
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.Dialog;
+import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.ViewportSize;
 import core.PomParams;
-import core.browser.PlaywrightBrowser;
 import core.browser.BrowserType;
-import core.browserfactory.*;
+import core.browser.PlaywrightBrowser;
+import core.browserfactory.ChromeBrowserFactory;
+import core.browserfactory.EdgeBrowserFactory;
+import core.browserfactory.FirefoxBrowserFactory;
+import core.browserfactory.WebkitBrowserFactory;
 import models.User;
-import models.UserGroup;
-import models.testngpages.*;
+import models.enums.UserGroup;
+import models.testngpages.AbstractPage;
+import models.testngpages.MainPage;
+import models.testngpages.carbrand.CarBrandsBrowsePage;
+import models.testngpages.signin.SignInFormPage;
+import models.testngpages.signup.SignUpFormPage;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.assertj.core.api.Assertions;
-import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -25,42 +32,37 @@ import java.lang.reflect.InvocationTargetException;
 
 import static core.mailosaur.MailosaurMessageManager.getLinkFromMessage;
 import static core.mailosaur.MailosaurServerManager.getEmailByRecipientName;
-
+import static models.enums.SystemAlerts.*;
+import static utils.LogBinder.bindLogName;
+import static utils.LogBinder.unbind;
 
 public abstract class AbstractTest implements PomParams {
 
+    private static final Log logger = LogFactory.getLog(AbstractTest.class);
+
     private Playwright playwright;
     private Browser browser;
-    private Page playwrightPage;
-    private static final String BASE_URL = "http://localhost:3000";
+    public Page playwrightPage;
+    private static ThreadLocal<Page> threadLocalPage = new ThreadLocal<>();
+    private final String baseUrl = getBaseUrl();
     protected MainPage mainPage;
     protected CarBrandsBrowsePage carBrandsBrowsePage;
     protected User existedAdminUser = new User.UserBuilder(UserGroup.ADMIN).build();
     protected User existedSimpleUser = new User.UserBuilder(UserGroup.USER).build();
-    protected static final String SUCCESS_ALERT_REGISTRATION_TEXT = "Success! Confirmation email has been sent. Check your spam folder as well just in case.";
-    protected static final String SUCCESS_ALERT_CONFIRMATION_EMAIL_ADDRESS_TEXT = "Success! Your account has been activated! Now, you can sign in.";
-    protected static final String SUCCESS_ALERT_LOGIN_TEXT = "Success! You have been signed in correctly.";
-    protected static final String DANGER_ALERT_INVALID_EMAIL_TEXT = "Error! Invalid email address.";
-    protected static final String SUCCESS_ALERT_SIGN_OUT_TEXT = "Success! You have been signed out correctly.";
-    protected static final String SUCCESS_ALERT_USER_REMOVED_TEXT = "Success! User has been removed.";
-    protected static final String SUCCESS_ALERT_ADDED_CAR_BRAND_TEXT = "Success! Car brand has been added.";
-    protected static final String SUCCESS_ALERT_DELETED_CAR_BRAND_TEXT = "Success! Car brand has been removed.";
-    private String attemptNumber;
     private String testClassName;
-    private double startTime;
-    private double endTime;
 
     public void setUp(ITestContext iTestContext) {
+        logger.info("Playwright starting");
         this.testClassName = iTestContext.getAllTestMethods()[0].getTestClass().getName().substring(StringUtils.lastIndexOf(iTestContext.getAllTestMethods()[0].getTestClass().getName(), ".") + 1);
-        this.attemptNumber = iTestContext.getName();
+        bindLogName(testClassName);
         this.playwright = Playwright.create();
         this.browser = getBrowser(playwright);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int) screenSize.getWidth();
-        int height = (int) screenSize.getHeight();
-        BrowserContext context = browser.newContext(new Browser.NewContextOptions().setViewportSize(width, height));
+        BrowserContext context = browser.newContext(new Browser.NewContextOptions().setViewportSize(getViewportSize()));
         this.playwrightPage = context.newPage();
-        mainPage = openPageWithUrl(BASE_URL, MainPage.class);
+        threadLocalPage.set(playwrightPage);
+        playwrightPage.onDialog(Dialog::accept);
+        mainPage = openPageWithUrl(baseUrl, MainPage.class);
+        assertThatMainPageIsVisible();
         carBrandsBrowsePage = new CarBrandsBrowsePage(playwrightPage);
     }
 
@@ -78,8 +80,20 @@ public abstract class AbstractTest implements PomParams {
         }
     }
 
+    public static Page getPageFromThreadLocal() {
+        return threadLocalPage.get();
+    }
+
+    private ViewportSize getViewportSize() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) screenSize.getWidth();
+        int height = (int) screenSize.getHeight();
+        return new ViewportSize(width, height);
+    }
+
     protected  <T extends AbstractPage> T openPageWithUrl(String url, Class<T> clazz) {
-        playwrightPage.navigate(url);
+        logger.info(String.format("Opening page with url: %s", url));
+        playwrightPage.navigate(url, new Page.NavigateOptions().setTimeout(100000));
         T page = null;
         try {
             page = clazz.getDeclaredConstructor(Page.class).newInstance(this.playwrightPage);
@@ -96,11 +110,11 @@ public abstract class AbstractTest implements PomParams {
         signUpFormPage.inputPasswordConfirmation(user.getPassword());
         signUpFormPage.selectTermsAndConditionsCheckbox();
         signUpFormPage.clickSignUp();
-        Assertions.assertThat(mainPage.isFormWasValidatedWithSuccess()).isTrue();
-        Assertions.assertThat(mainPage.getTextFromSuccessAlert()).contains(SUCCESS_ALERT_REGISTRATION_TEXT);
+        assertThatFormWasValidatedWithSuccess(true);
+        assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_REGISTRATION_TEXT.getAlertText());
         String confirmationUrl = getLinkFromMessage(getEmailByRecipientName(user.getEmail()));
         mainPage = openPageWithUrl(confirmationUrl, MainPage.class);
-        Assertions.assertThat(mainPage.getTextFromSuccessAlert()).contains(SUCCESS_ALERT_CONFIRMATION_EMAIL_ADDRESS_TEXT);
+        assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_CONFIRMATION_EMAIL_ADDRESS_TEXT.getAlertText());
     }
 
     protected void signIn(User user, boolean... withError) {
@@ -108,34 +122,56 @@ public abstract class AbstractTest implements PomParams {
         signInFormPage.inputEmail(user.getEmail());
         signInFormPage.inputPassword(user.getPassword());
         signInFormPage.clickSignIn();
-        Assert.assertTrue(mainPage.isFormWasValidatedWithSuccess());
+        assertThatFormWasValidatedWithSuccess(true);
         if (withError.length == 0) {
-            Assertions.assertThat(mainPage.getTextFromSuccessAlert()).contains(SUCCESS_ALERT_LOGIN_TEXT);
+            assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_LOGIN_TEXT.getAlertText());
         } else {
-            Assertions.assertThat(mainPage.getTextFromDangerAlert()).contains(DANGER_ALERT_INVALID_EMAIL_TEXT);
+            assertThatDangerAlertHasExpectedText(DANGER_ALERT_INVALID_CREDENTIALS_TEXT.getAlertText());
         }
     }
 
     protected void signOut() {
         mainPage.clickSignOut();
-        Assertions.assertThat(mainPage.getTextFromSuccessAlert()).contains(SUCCESS_ALERT_SIGN_OUT_TEXT);
+        assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_SIGN_OUT_TEXT.getAlertText());
     }
+
+    protected void assertThatSuccessAlertHasExpectedText(String text) {
+        Assertions.assertThat(mainPage.isSuccessAlertVisibleWithExpectedText(text))
+                .as("Assert that success alert has text: " + text)
+                .isTrue();
+    }
+
+    protected void assertThatDangerAlertHasExpectedText(String text) {
+        Assertions.assertThat(mainPage.isDangerAlertVisibleWithExpectedText(text))
+                .as("Assert that danger alert has text: " + text)
+                .isTrue();
+    }
+
+    protected void assertThatFormWasValidatedWithSuccess(boolean withSuccess) {
+        Assertions.assertThat(mainPage.isFormWasValidatedWithSuccess())
+                .as("Assert that form was validated with success: " + withSuccess)
+                .isEqualTo(withSuccess);
+    }
+
+    protected void assertThatMainPageIsVisible() {
+        Assertions.assertThat(mainPage.isMainPageVisible())
+                .as("Assert that main page is visible")
+                .isTrue();
+    }
+
 
     @BeforeClass
     public void initialize(ITestContext iTestContext) {
-        startTime = System.currentTimeMillis();
         setUp(iTestContext);
     }
 
     @AfterClass(alwaysRun = true)
     public void closePage() {
+        logger.info("Playwright quitting");
         playwrightPage.close();
         browser.close();
         playwright.close();
-
-        endTime = System.currentTimeMillis();
-        double testExecutionTimeInSeconds = (endTime - startTime)/1000.0;
-        System.out.println("Czas wykonania testu " + testClassName + " (" + getBrowserType() + ") " +
-                "- numer próby (" + attemptNumber + "): " + testExecutionTimeInSeconds + " [s]" );
+        threadLocalPage.remove();
+        unbind();
     }
 }

@@ -8,6 +8,6 @@ import core.PomParams;
 public class FirefoxBrowserFactory implements BrowserFactory, PomParams {
 
     public Browser launchBrowser(Playwright playwright) {
-        return playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(false));
+        return playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(isHeadlessModeEnabled()));
     }
 }

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="test suite">
+    <listeners>
+        <listener class-name="listeners.SuiteListener"/>
+    </listeners>
     <test name="e2e tests" parallel="classes" thread-count="6">
         <classes>
             <class name="testngtests.RegistrationTest"/>
@@ -11,10 +14,4 @@
             <class name="testngtests.CarModelTest"/>
         </classes>
     </test>
-<!--    <test name="RemovingTestData" thread-count="2">
-        <classes>
-            <class name="testngtests.RemovingUsersTest"/>
-            <class name="testngtests.RemovingCarBrandsTest"/>
-        </classes>
-    </test>-->
 </suite>
