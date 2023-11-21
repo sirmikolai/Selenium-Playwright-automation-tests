@@ -1,10 +1,10 @@
 # Selenium-Playwright-automation-tests
 
 ## Spis treści:
-### [Opis](#opis)
-### [Scenariusze-testowe](#scenariusze-testowe)
-### [Wymagania](#wymagania)
-### [Uruchomienie testów](#uruchomienie-testów)
+[Opis](#opis)
+[Scenariusze-testowe](#scenariusze-testowe)
+[Wymagania](#wymagania)
+[Uruchomienie testów](#uruchomienie-testów)
 
 ## Opis:
 
