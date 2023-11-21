@@ -346,6 +346,14 @@ Selenium-Playwright-automation-tests is a repository containing end-to-end (E2E)
 
 The automated tests verify my custom web application Car-info-app, which is accessible at LINK (sometimes you may need to wait a moment after entering the site for the server to start, usually taking about a minute).
 
+Automated tests verify functionalities such as:
+- user registration functionality - [Scenario Description](#user-registration),
+- user login functionality - [Scenario Description](#user-login),
+- user password change functionality - [Scenario Description](#user-password-change),
+- user management functionality using the administrator panel - [Scenario Description](#user-management),
+- car brand addition, editing, and deletion functionality - [Scenario Description](#adding-editing-deleting-car-brands),
+- car model addition, editing, and deletion functionality - [Scenario Description](#adding-editing-deleting-car-models).
+
 Test automation for the Selenium framework uses the following libraries:
 ```
 - Selenium v.4.15.0,
@@ -471,7 +479,7 @@ The Page Object Model pattern was used during the implementation of automated te
 <tr><td colspan="1" valign="top"><b>Final actions:</b></td><td colspan="1" valign="top">None</td></tr>
 </table>
 
-## Changing password
+## User password change
 ### Test Class: `ChangingPasswordTest`
 
 <table><tr><th colspan="2" valign="top"><b>TEST SCENARIO #3</b></th></tr>
