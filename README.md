@@ -342,7 +342,7 @@ Po wykonaniu testów, generowany jest raport przy użyciu biblioteki Allure-test
 
 ## Description
 
-Selenium-Playwright-automation-tests is a repository containing end-to-end (E2E) automated tests prepared for two different frameworks: Selenium and Playwright. The repository served me for conducting necessary research in my master's thesis titled "The comparative analysis of selected frameworks for automatic testing of web applications using Java programming language".
+Selenium-Playwright-automation-tests is a repository containing end-to-end (E2E) automated tests prepared for two different frameworks: `Selenium` and `Playwright`. The repository served me for conducting necessary research in my master's thesis titled "The comparative analysis of selected frameworks for automatic testing of web applications using Java programming language".
 
 The automated tests verify my custom web application Car-info-app, which is accessible at LINK (sometimes you may need to wait a moment after entering the site for the server to start, usually taking about a minute).
 
