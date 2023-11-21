@@ -57,7 +57,12 @@ public abstract class AbstractTest implements PomParams {
         bindLogName(testClassName);
         this.playwright = Playwright.create();
         this.browser = getBrowser(playwright);
-        BrowserContext context = browser.newContext(new Browser.NewContextOptions().setViewportSize(getViewportSize()));
+        BrowserContext context;
+        if (!isHeadlessModeEnabled()) {
+            context = browser.newContext(new Browser.NewContextOptions().setViewportSize(getViewportSize()));
+        } else {
+            context = browser.newContext();
+        }
         this.playwrightPage = context.newPage();
         threadLocalPage.set(playwrightPage);
         playwrightPage.onDialog(Dialog::accept);
@@ -168,10 +173,12 @@ public abstract class AbstractTest implements PomParams {
     @AfterClass(alwaysRun = true)
     public void closePage() {
         logger.info("Playwright quitting");
-        playwrightPage.close();
-        browser.close();
-        playwright.close();
-        threadLocalPage.remove();
+        if (playwrightPage != null) {
+            playwrightPage.close();
+            browser.close();
+            playwright.close();
+            threadLocalPage.remove();
+        }
         unbind();
     }
 }
