@@ -1,5 +1,11 @@
 # Selenium-Playwright-automation-tests
 
+## Spis treści:
+### [Opis](#opis)
+### [Scenariusze-testowe](#scenariusze-testowe)
+### [Wymagania](#wymagania)
+### [Uruchomienie testów](#uruchomienie-testów)
+
 ## Opis:
 
 Selenium-Playwright-automation-tests jest to repozytorium z testami automatycznymi E2E przygotowanymi dla dwóch różnych frameworków `Selenium` oraz `Playwright`. Repozytorium posłużyło mi do przeprowadzenia niezbędnych badań w mojej pracy magisterskiej pt. `Analiza i porównanie wybranych frameworków do testowania automatycznego aplikacji przy użyciu języka Java`.
