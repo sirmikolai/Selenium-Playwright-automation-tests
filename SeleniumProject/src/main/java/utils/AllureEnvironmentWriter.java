@@ -17,6 +17,7 @@ public class AllureEnvironmentWriter implements PomParams {
 
     public static void writeAllureEnvironmentProperties() {
         ImmutableMap<String, String> allureProperties = ImmutableMap.<String, String> builder()
+                .put("Framework:", "SELENIUM")
                 .put("Environment URL:", System.getProperty("baseUrl"))
                 .put("Branch:", getCurrentGitBranch())
                 .put("Browser:", System.getProperty("browser"))
