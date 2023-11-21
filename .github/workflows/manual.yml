@@ -106,7 +106,7 @@ jobs:
 
       - name: Generate Allure report for Selenium
         uses: simple-elf/allure-report-action@master
-        if: always() && "contains(github.event.inputs.framework, 'Selenium')"
+        if: "always() && contains(github.event.inputs.framework, 'Selenium')"
         with:
           allure_results: ./SeleniumProject/allure-results
           gh_pages: gh-pages
@@ -116,7 +116,7 @@ jobs:
 
       - name: Generate Allure report for Playwright
         uses: simple-elf/allure-report-action@master
-        if: always() && "contains(github.event.inputs.framework, 'Playwright')"
+        if: "always() && contains(github.event.inputs.framework, 'Playwright')"
         with:
           allure_results: ./PlaywrightProject/allure-results
           gh_pages: gh-pages
