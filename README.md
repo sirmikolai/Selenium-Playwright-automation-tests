@@ -623,10 +623,16 @@ mvn clean install -DskipTests --file ./SeleniumProject/pom.xml
 mvn clean install -DskipTests --file ./PlaywrightProject/pom.xml
 ```
  
-To run all automated tests, use the following command:
+To run automated tests, use the following command:
 ```
 mvn test --file ./SeleniumProject/pom.xml
+mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=chrome
+mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=firefox
+mvn test --file ./SeleniumProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=edge
 mvn test --file ./PlaywrightProject/pom.xml
+mvn test --file ./PlaywrightProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=chrome
+mvn test --file ./PlaywrightProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=firefox
+mvn test --file ./PlaywrightProject/pom.xml -DsuiteFile=testsuite.xml -Dbrowser=edge
 ```
 
 # CI/CD Integration:
