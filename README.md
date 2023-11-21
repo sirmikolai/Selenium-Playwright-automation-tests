@@ -5,6 +5,7 @@
 [Scenariusze-testowe](#scenariusze-testowe)
 [Wymagania](#wymagania)
 [Uruchomienie testów](#uruchomienie-testów)
+[Integracja CI/CD](#integracja-ci-cd)
 
 ## Opis:
 
@@ -305,3 +306,15 @@ Aby uruchomić wszystkie testy automatyczne należy użyc polecenia:
 mvn test --file ./SeleniumProject/pom.xml
 mvn test --file ./PlaywrightProject/pom.xml
 ```
+
+# Integracja CI/CD:
+
+Dla przedstawionych projektów został przygotowany pipeline przy użyciu narzędzia GitHub Actions, który jest uruchamiany manualnie. 
+
+Pipeline posiada dwa parametry:
+- Framework (wybierany jest projekt na którym mają zostać uruchomione testy automatyczne),
+- Browser (wybierana jest przeglądarka na której mają zostać uruchomione testy automatyczne).
+
+Kod źródłowy pipeline jest umieszczony tutaj [LINK](https://github.com/sirmikolai/Selenium-Playwright-automation-tests/blob/main/.github/workflows/manual.yml)
+
+Po wykonaniu testów, generowany jest raport przy użyciu biblioteki Allure-testng i jest udostępniany na stronie [LINK](https://sirmikolai.github.io/Selenium-Playwright-automation-tests/)
