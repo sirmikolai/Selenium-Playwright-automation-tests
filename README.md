@@ -212,7 +212,7 @@ Podczas implementacji testów automatycznych został użyty wzorzec Page Object 
 <tr><td colspan="1" valign="top"><b>Czynności końcowe:</b></td><td colspan="1" valign="top">Brak</td></tr>
 </table>
 
-## Dodawanie edycja usuwanie marek samochodów
+## Dodawanie, edycja, usuwanie marek samochodów
 ### Klasa testowa: `CarBrandTest`
 
 <table><tr><th colspan="2" valign="top"><p><b>SCENARIUSZ TESTOWY #5</b></p><p><b>Dodawanie, edycja i usuwanie marek samochodów.</b></p></th></tr>
@@ -246,7 +246,7 @@ Podczas implementacji testów automatycznych został użyty wzorzec Page Object 
 <tr><td colspan="1" valign="top"><b>Czynności końcowe:</b></td><td colspan="1" valign="top">Brak</td></tr>
 </table>
 
-## Dodawanie edycja usuwanie modeli samochodów
+## Dodawanie, edycja, usuwanie modeli samochodów
 ### Klasa testowa: `CarModelTest`
 
 <table><tr><th colspan="2" valign="top"><p><b>SCENARIUSZ TESTOWY #6</b></p><p><b>Dodawanie, edycja i usuwanie modeli samochodów.</b></p></th></tr>
