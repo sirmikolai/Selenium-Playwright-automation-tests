@@ -8,6 +8,6 @@ import core.PomParams;
 public class WebkitBrowserFactory implements BrowserFactory, PomParams {
 
     public Browser launchBrowser(Playwright playwright) {
-        return playwright.webkit().launch(new BrowserType.LaunchOptions().setHeadless(false));
+        return playwright.webkit().launch(new BrowserType.LaunchOptions().setHeadless(isHeadlessModeEnabled()));
     }
 }

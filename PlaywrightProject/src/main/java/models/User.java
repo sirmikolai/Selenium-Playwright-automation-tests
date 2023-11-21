@@ -1,5 +1,7 @@
 package models;
 
+import models.enums.UserGroup;
+
 import static core.mailosaur.MailosaurServerManager.generateEmailAddress;
 import static models.generators.PasswordGenerator.generatePassword;
 

@@ -8,6 +8,6 @@ import core.PomParams;
 public class ChromeBrowserFactory implements BrowserFactory, PomParams {
 
     public Browser launchBrowser(Playwright playwright) {
-        return playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false).setChannel("chrome"));
+        return playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(isHeadlessModeEnabled()).setChannel("chrome"));
     }
 }

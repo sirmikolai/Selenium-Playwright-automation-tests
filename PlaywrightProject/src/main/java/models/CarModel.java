@@ -1,5 +1,6 @@
 package models;
 
+import models.enums.CarModelClass;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Arrays;

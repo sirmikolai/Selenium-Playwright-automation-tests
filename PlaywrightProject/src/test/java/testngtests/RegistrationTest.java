@@ -1,11 +1,12 @@
 package testngtests;
 
 import com.mailosaur.MailosaurException;
+import listeners.TestListener;
 import models.User;
 import models.testngpages.MainPage;
-import models.testngpages.SignUpFormPage;
-import org.assertj.core.api.Assertions;
+import models.testngpages.signup.SignUpFormPage;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import testngtests.abstractclasses.AbstractTest;
 
@@ -13,26 +14,27 @@ import java.io.IOException;
 
 import static core.mailosaur.MailosaurMessageManager.getLinkFromMessage;
 import static core.mailosaur.MailosaurServerManager.getEmailByRecipientName;
+import static models.enums.SystemAlerts.*;
 import static models.generators.PasswordGenerator.generatePassword;
 
+@Listeners(TestListener.class)
 public class RegistrationTest extends AbstractTest {
 
     private User newUser = new User.UserBuilder().build();
     private User newUser2 = new User.UserBuilder().build();
-    private static final String DANGER_ALERT_EMAIL_USED = "Error! There is already registered user with that email!";
 
     @DataProvider(name = "userData")
     public Object[][] userData() {
         return new Object [][] {
                 { newUser.getEmail(), newUser.getPassword(), newUser.getPassword(), true, true, null },
-                { newUser.getEmail(), newUser.getPassword(), newUser.getPassword(), true, true, DANGER_ALERT_EMAIL_USED },
+                { newUser.getEmail(), newUser.getPassword(), newUser.getPassword(), true, true, DANGER_ALERT_EMAIL_USED.getAlertText() },
                 { newUser2.getEmail(), newUser2.getPassword(), generatePassword(10), true, false, null },
                 { newUser2.getEmail(), newUser2.getPassword(), newUser2.getPassword(), false, false, null },
         };
     }
 
     @Test(dataProvider = "userData")
-    public void registrationTest(String email, String password, String confirmationPassword, boolean selectTermsAndConditions, boolean correctValidation, String dangerAlertText) throws IOException, MailosaurException {
+    public void registrationTest(String email, String password, String confirmationPassword, boolean selectTermsAndConditions, boolean isCorrectValidation, String dangerAlertText) throws IOException, MailosaurException {
         SignUpFormPage signUpFormPage = mainPage.goToSignUpForm();
         signUpFormPage.inputEmail(email);
         signUpFormPage.inputPassword(password);
@@ -41,15 +43,15 @@ public class RegistrationTest extends AbstractTest {
             signUpFormPage.selectTermsAndConditionsCheckbox();
         }
         signUpFormPage.clickSignUp();
-        Assertions.assertThat(mainPage.isFormWasValidatedWithSuccess()).isEqualTo(correctValidation);
-        if (correctValidation && dangerAlertText == null) {
-            Assertions.assertThat(mainPage.getTextFromSuccessAlert()).contains(SUCCESS_ALERT_REGISTRATION_TEXT);
+        assertThatFormWasValidatedWithSuccess(isCorrectValidation);
+        if (isCorrectValidation && dangerAlertText == null) {
+            assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_REGISTRATION_TEXT.getAlertText());
             String confirmationUrl = getLinkFromMessage(getEmailByRecipientName(newUser.getEmail()));
             mainPage = openPageWithUrl(confirmationUrl, MainPage.class);
-            Assertions.assertThat(mainPage.getTextFromSuccessAlert()).contains(SUCCESS_ALERT_CONFIRMATION_EMAIL_ADDRESS_TEXT);
+            assertThatSuccessAlertHasExpectedText(SUCCESS_ALERT_CONFIRMATION_EMAIL_ADDRESS_TEXT.getAlertText());
         }
         if (dangerAlertText != null) {
-            Assertions.assertThat(mainPage.getTextFromDangerAlert()).contains(dangerAlertText);
+            assertThatDangerAlertHasExpectedText(dangerAlertText);
         }
     }
 

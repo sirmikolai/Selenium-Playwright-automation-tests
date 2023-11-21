@@ -1,11 +1,15 @@
-package models.testngpages;
+package models.testngpages.carbrand.carmodel;
 
-import com.microsoft.playwright.Dialog;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
-import models.CarModelClass;
+import models.enums.CarModelClass;
+import models.testngpages.MainPage;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class CarBrandModelsBrowsePage extends MainPage {
+
+    private static final Log logger = LogFactory.getLog(CarBrandModelsBrowsePage.class);
 
     public static final String ROOT_XPATH = "//div[@class='container']";
     private static final String ADD_CAR_MODEL_BUTTON_XPATH = ROOT_XPATH + "//a[contains(@href,'car-models/add-form')]";
@@ -23,35 +27,35 @@ public class CarBrandModelsBrowsePage extends MainPage {
     }
 
     public CarModelFormPage addCarModel() {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.click(ADD_CAR_MODEL_BUTTON_XPATH);
+        logger.info("Click 'Add car model' button");
+        clickElement(ADD_CAR_MODEL_BUTTON_XPATH);
         playwrightWait.waitUntil(CarModelFormPage.ROOT_CSS, WaitForSelectorState.VISIBLE);
         return new CarModelFormPage(playwrightPage);
     }
 
     public boolean isRowWithCarModelNameVisible(String name) {
-        playwrightWait.waitForPageLoad();
-        return playwrightPage.isVisible(String.format(ROW_BY_NAME_XPATH, name));
+        logger.info(String.format("Check if row with car model name '%s' is visible", name));
+        return isElementDisplayedOnThePage(String.format(ROW_BY_NAME_XPATH, name), 1);
     }
 
     public String getCarBrandLogoUrl() {
-        playwrightWait.waitForPageLoad();
-        return playwrightPage.locator(CAR_BRAND_LOGO_URL_XPATH).getAttribute("src");
+        logger.info("Get car brand logo URL");
+        return getAttributeValueFromElement(CAR_BRAND_LOGO_URL_XPATH, "src");
     }
 
     public String getCarBrandName() {
-        playwrightWait.waitForPageLoad();
-        return playwrightPage.locator(CAR_BRAND_NAME_XPATH).textContent();
+        logger.info("Get car brand name");
+        return getTextFromElement(CAR_BRAND_NAME_XPATH);
     }
 
     public String getCarModelNameForName(String name) {
-        playwrightWait.waitForPageLoad();
-        return playwrightPage.locator(String.format(CAR_MODEL_NAME_XPATH, name)).textContent();
+        logger.info("Get car model name");
+        return getTextFromElement(String.format(CAR_MODEL_NAME_XPATH, name));
     }
 
     public CarModelClass getCarModelClassForName(String name) {
-        playwrightWait.waitForPageLoad();
-        String className = playwrightPage.locator(String.format(CAR_MODEL_CLASS_XPATH, name)).textContent();
+        logger.info(String.format("Get car model class for name %s", name));
+        String className = getTextFromElement(String.format(CAR_MODEL_CLASS_XPATH, name));
         for (CarModelClass carModelClass : CarModelClass.values()) {
             if (className.contains(carModelClass.getDisplayedText())) {
                 return carModelClass;
@@ -61,24 +65,20 @@ public class CarBrandModelsBrowsePage extends MainPage {
     }
 
     public int getCarModelNumberOfGenerationsForName(String name) {
-        playwrightWait.waitForPageLoad();
-        return Integer.parseInt(playwrightPage.locator(String.format(CAR_MODEL_NUMBER_OF_GENERATIONS_XPATH, name)).textContent());
+        logger.info(String.format("Get car model number of generations for name %s", name));
+        return Integer.parseInt(getTextFromElement(String.format(CAR_MODEL_NUMBER_OF_GENERATIONS_XPATH, name)));
     }
 
     public CarModelFormPage editCarModelForName(String name) {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.locator(String.format(CAR_MODEL_EDIT_BUTTON_XPATH, name)).scrollIntoViewIfNeeded();
-        playwrightPage.click(String.format(CAR_MODEL_EDIT_BUTTON_XPATH, name));
+        logger.info(String.format("Click 'Edit car model' button for name %s", name));
+        clickElement(String.format(CAR_MODEL_EDIT_BUTTON_XPATH, name));
         playwrightWait.waitUntil(CarModelFormPage.ROOT_CSS, WaitForSelectorState.VISIBLE);
         return new CarModelFormPage(playwrightPage);
     }
 
     public CarBrandModelsBrowsePage deleteCarModelForName(String name) {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.locator(String.format(CAR_MODEL_DELETE_BUTTON_XPATH, name)).scrollIntoViewIfNeeded();
-        playwrightPage.locator(String.format(CAR_MODEL_DELETE_BUTTON_XPATH, name)).click();
-        playwrightPage.onDialog(Dialog::accept);
-        playwrightWait.waitForPageLoad();
+        logger.info(String.format("Click 'Delete car model' button for name %s", name));
+        clickElement(String.format(CAR_MODEL_DELETE_BUTTON_XPATH, name));
         return this;
     }
 

@@ -1,8 +1,13 @@
-package models.testngpages;
+package models.testngpages.signup;
 
 import com.microsoft.playwright.Page;
+import models.testngpages.MainPage;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class SignUpFormPage extends MainPage {
+
+    private static final Log logger = LogFactory.getLog(SignUpFormPage.class);
 
     public static final String ROOT_CSS = "form[action='/sign-up']";
     private static final String EMAIL_INPUT_CSS = ROOT_CSS + " input[name='email']";
@@ -16,40 +21,32 @@ public class SignUpFormPage extends MainPage {
     }
 
     public SignUpFormPage inputEmail(String emailAddress) {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.fill(EMAIL_INPUT_CSS, "");
-        playwrightPage.fill(EMAIL_INPUT_CSS, emailAddress);
-        playwrightWait.waitForPageLoad();
+        logger.info("Input email");
+        fillField(EMAIL_INPUT_CSS, emailAddress);
         return this;
     }
 
     public SignUpFormPage inputPassword(String password) {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.fill(PASSWORD_INPUT_CSS, "");
-        playwrightPage.fill(PASSWORD_INPUT_CSS, password);
-        playwrightWait.waitForPageLoad();
+        logger.info("Input password");
+        fillField(PASSWORD_INPUT_CSS, password);
         return this;
     }
 
     public SignUpFormPage inputPasswordConfirmation(String password) {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.fill(PASSWORD_CONFIRMATION_INPUT_CSS, "");
-        playwrightPage.fill(PASSWORD_CONFIRMATION_INPUT_CSS, password);
-        playwrightWait.waitForPageLoad();
+        logger.info("Input password confirmation");
+        fillField(PASSWORD_CONFIRMATION_INPUT_CSS, password);
         return this;
     }
 
     public SignUpFormPage selectTermsAndConditionsCheckbox() {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.check(TERMS_AND_CONDITIONS_CHECKBOX_CSS);
-        playwrightWait.waitForPageLoad();
+        logger.info("Select 'Agree to terms and conditions' checkbox");
+        clickElement(TERMS_AND_CONDITIONS_CHECKBOX_CSS);
         return this;
     }
 
     public MainPage clickSignUp() {
-        playwrightWait.waitForPageLoad();
-        playwrightPage.click(SIGN_UP_BUTTON_CSS);
-        playwrightWait.waitForPageLoad();
+        logger.info("Click 'Sign up' button");
+        clickElement(SIGN_UP_BUTTON_CSS);
         return new MainPage(playwrightPage);
     }
 

@@ -32,7 +32,6 @@ import static models.enums.SystemAlerts.*;
 import static utils.LogBinder.bindLogName;
 import static utils.LogBinder.unbind;
 
-
 public abstract class AbstractTest implements PomParams {
 
     private static final Log logger = LogFactory.getLog(AbstractTest.class);
