@@ -331,7 +331,7 @@ Po wykonaniu testów, generowany jest raport przy użyciu biblioteki Allure-test
 [Description](#description)
 [Test Scenarios](#test-scenarios)
 [Requirements](#requirements)
-[Running Tests](#running-tests)
+[How to run tests](#how-to-run-tests)
 [CI/CD Integration](#cicd-integration)
 
 ## Description
