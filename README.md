@@ -5,7 +5,7 @@
 [Scenariusze-testowe](#scenariusze-testowe)
 [Wymagania](#wymagania)
 [Uruchomienie testów](#uruchomienie-testów)
-[Integracja CI/CD](#integracja-ci-cd)
+[Integracja CI/CD](#integracja-cicd)
 
 ## Opis:
 
