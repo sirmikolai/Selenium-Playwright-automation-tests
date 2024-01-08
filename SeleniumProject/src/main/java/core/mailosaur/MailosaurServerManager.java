@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class MailosaurServerManager {
 
-    public static final String SERVER_ID = "orvdkrqp";
+    public static final String SERVER_ID = "1jnplcil";
     private static final int POLLING_TIME_IN_MILLIS = 20000;
 
     private MailosaurServerManager() {

@@ -2,10 +2,10 @@ package core.mailosaur;
 
 import com.mailosaur.MailosaurClient;
 
-class MailosaurConnectionManager {
+public class MailosaurConnectionManager {
 
     MailosaurClient initializeConnectionToMailosaur() {
-        String mailosaurApiKey = "bR0zeFCgUeNv32eGQYgjM3hJdhekJ5Ud";
+        String mailosaurApiKey = "rboVdaP79SE9UhMm90RlHhGUTkjHbGlG";
         return new MailosaurClient(mailosaurApiKey);
     }
 
