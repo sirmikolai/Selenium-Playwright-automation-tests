@@ -5,7 +5,7 @@ import com.mailosaur.MailosaurClient;
 class MailosaurConnectionManager {
 
     MailosaurClient initializeConnectionToMailosaur() {
-        String mailosaurApiKey = "rboVdaP79SE9UhMm90RlHhGUTkjHbGlG";
+        String mailosaurApiKey = "QrAsWzkoP77e7ELiYFsRIVCx8MTvYTWA";
         return new MailosaurClient(mailosaurApiKey);
     }
 
